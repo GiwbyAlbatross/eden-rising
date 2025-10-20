@@ -13,6 +13,7 @@ class AbstractEntity(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
     def tick(self) -> None:
         " tick this entity, do complex logic etc "
         pass
+    # def init(self, *args, **kwargs) -> None: is not defined so multi-inherited classes can still use it
     @abc.abstractmethod
     def update(self, dt: float=1/60) -> None:
         " update this entity's position and other per-frame stuff, `dt` is in seconds "
