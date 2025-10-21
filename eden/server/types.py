@@ -7,11 +7,11 @@ class Item(BaseModel):
     attributes: dict[str, Any]
 
 class EntityState(BaseModel):
-    entityID: Optional[str] # must be provided if not provided in URL/URI
-    hashedpass: Optional[str] # SHOULD NOT BE SUPPLIED unless logging in/out
-    #                         # (unless using guest account, in which case its contents are ignored)
-    #                         # hash is supplied in base64 encoding
-    helditem: Optional[Item] # only supplied if an item is being held
+    entityID: Optional[str] = None # # must be provided if not provided in URL/URI
+    hashedpass: Optional[str] = None # SHOULD NOT BE SUPPLIED unless logging in/out
+    #                                # (unless using guest account, in which case its contents are ignored)
+    #                                # hash is supplied in base64 encoding
+    helditem: Optional[Item]=None #  # only supplied if an item is being held
 
 class EntityPos2D(BaseModel):
     entityID: Optional[str] # must be provided if not provided in URL/URI

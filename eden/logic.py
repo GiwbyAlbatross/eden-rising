@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class Vector2:
     x: float
     y: float
-    def __init__(self, x: float, y: Optional[float]):
+    def __init__(self, x: float, y: Optional[float]=None):
         if y is None:
             self.x, self.y = x, x
         else:
@@ -42,10 +42,7 @@ class LogicalPlayer:
             #                                  # networking happens at other times, in threads
     def get_state(self) -> EntityState:
         # more state attributes will be added later but for now forget it
-        es = EntityState()
-        es.entityID = self.username
-        es.helditem = self.helditem
-        es.hashedpass = None
+        es = EntityState(entityId=self.username, helditem=self.helditem)
         return es
     def set_state(self, state: EntityState) -> None:
         if self.username != state.entityID:
@@ -63,11 +60,7 @@ class LogicalPlayer:
                 logger.warning(f"Too many inventory items passed to LogicalPlayer.setinv: {len(inv)} > 8 : still updating inventory, assuming server is modded")
         self.inventory = inv
     def getpos(self) -> EntityPos2D:
-        r = EntityPos2D()
-        r.entityID = self.username
-        r.x = self.logical_pos.x
-        r.y = self.logical_pos.y
-        return r
+        return EntityPos2D(entityID=self.username, x=self.logical_pos.x, y=self.logical_pos.y)
     def setpos(self, pos: EntityPos2D) -> None:
         if pos.entityID is not None:
             if self.username != pos.entityID:
