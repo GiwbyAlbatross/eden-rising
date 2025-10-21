@@ -6,7 +6,8 @@ __pycache__
 # ghostwriter md editor backups
 *.backup
 
-# linter/type-checker cache
+# linter/type-checker/unittesting cache
 .pylint_cache
 .ruff_cache
 .mypy_cache
+.pytest_cache

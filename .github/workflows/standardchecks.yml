@@ -21,6 +21,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r devrequirements.txt
         pip install -r server/requirements.txt
-    - name: Analysing the code with pylint
+    - name: Analysing the code with mypy, ruff and pytest
       run: |
         sh runchecks.sh
