@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from pydantic import BaseModel
 
 class Item(BaseModel):
@@ -8,7 +8,9 @@ class Item(BaseModel):
 
 class EntityState(BaseModel):
     entityID: Optional[str] # must be provided if not provided in URL/URI
-    hashedpass: Optional[str] # SHOULD NOT BE SUPPLIED unless logging in/out (unless using guest account, in which case its contents are ignored)
+    hashedpass: Optional[str] # SHOULD NOT BE SUPPLIED unless logging in/out
+    #                         # (unless using guest account, in which case its contents are ignored)
+    #                         # hash is supplied in base64 encoding
     helditem: Optional[Item] # only supplied if an item is being held
 
 class EntityPos2D(BaseModel):

@@ -23,8 +23,8 @@ class Brian(RenderedPlayer):
     def update(self, dt: float=1/60):
         mv = self.mv * dt
         self.rect.move_ip(mv)
-        self.logical_pos.y = 0 - self.rect.centery/64
-        self.logical_pos.x = 0 - self.rect.centerx/64
+        self.logical_pos.y = 0 - self.rect.centery/64 # note that logical_pos is an awful homemade
+        self.logical_pos.x = 0 - self.rect.centerx/64 # Vector2 class which lacks stuff and is slow
     def render_nametag(self, surf: pygame.Surface):
         s = render_text(self.username.strip(' ') + ' Brian')
         r = s.get_rect(bottom=self.rect.top, centerx=self.rect.centerx)
