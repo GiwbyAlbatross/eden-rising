@@ -1,4 +1,4 @@
-" an object-oriented interface for making simple to complex pygame games "
+"an object-oriented interface for making simple to complex pygame games"
 # intentionally left otherwise blank (for now)
 
 import pygame
@@ -6,6 +6,7 @@ import pygame
 from . import game
 from . import scene
 from . import entity
+
 
 def run_game(game: game.AbstractGame, *init_args, **init_kwargs) -> int:
     game.init(*init_args, **init_kwargs)
