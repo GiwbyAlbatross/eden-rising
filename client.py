@@ -1,4 +1,5 @@
 import sys
+import argparse
 import pygame  # ?
 import pygamescenes
 import eden
@@ -6,7 +7,7 @@ import eden
 eden.IS_SERVER = False
 
 class EdenRisingClient(pygamescenes.game.BaseGame):
-    TICK_RATE = 500 # 2 Hz tick rate, really low because network is slow, maybe threads?
+    TICK_RATE = 1000 // eden.constants.TICK_RATE
     def update_tick(self) -> None:
         "tick entities and do network sync multiplayer stuff"
         for entity in self.ticked:
@@ -22,3 +23,11 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         for entity in self.rendered:
             entity.render(self.scr)
         return self.scr
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    # add arguments, etc
+    args = parser.parse_args()
+    game = EdenRisingClient(...)
+    game.init()
+    pygamescenes.run_game(game)
