@@ -8,7 +8,7 @@ Based on a fictional video game in a stage play I was involved in and decided to
 Dependency library `pygamescenes` from `GiwbyAlbatross/PygameScenes`
 
 #### assets
-Assets for the game itself. Inside is `img` (images), `audio` (audio), and `misc` (anything else)
+Assets for the game itself. Inside is `textures` (textures), `audio` (audio), `data` (data files or any other data strcture i dont want to hard-code) and `misc` (anything else)
 
 #### eden
 The main source code of the game.
@@ -42,8 +42,14 @@ To start the server, use the `uvicorn server.main:api`, provided you have instal
 
 To run the standard checks locally run the following commands:
 ```
-python3 -m pip install devrequirements.txt
+python3 -m pip install -r devrequirements.txt
 ./runchecks.sh
 ```
 
 Those very same standard checks are run on every push, via GitHub Actions.
+
+Code is formatted using the `black` formatting style. I use `ruff` however, for it is *much* faster. To format the code (which might not be done for every commit) run the following:
+```
+python3 -m pip install -r devrequirements.txt
+ruff format
+```
