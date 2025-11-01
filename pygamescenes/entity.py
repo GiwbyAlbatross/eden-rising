@@ -28,6 +28,7 @@ class AbstractEntity(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         "render this entity onto `surf` and return pixels changed"
         return surf.blit(self.surf, self.rect)
 
+
 class VisualEffect(pygame.sprite.Sprite):
     def __repr__(self) -> str:
         clsName = self.__class__.__name__

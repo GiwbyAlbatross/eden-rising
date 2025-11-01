@@ -27,14 +27,16 @@ class LogicalPlayer:
     helditem: Optional[Item] = None
     inventory: list[Item]
     lock: AsyncLock
+    chunkId: int
     mv: "Vector2 | pygame.Vector2"
 
-    def init(self, trait: str, pos: tuple[int, int]) -> None:
+    def init(self, trait: str, pos: tuple[int, int], chunkId: int = 0) -> None:
         self.username = trait
         self.logical_pos = Vector2(0.0)
         self.mv = Vector2(0.0)
         self.logical_pos.y = 0 - pos[0] / 64
-        self.logical_pos.x = 0 - pos[1] / 64
+        self.logical_pos.x = pos[1] / 64
+        self.chunkId = chunkId
         self.inventory = []
         self.lock = AsyncLock()
 
@@ -51,7 +53,9 @@ class LogicalPlayer:
 
     def get_state(self) -> EntityState:
         # more state attributes will be added later but for now forget it
-        es = EntityState(entityId=self.username, helditem=self.helditem)
+        es = EntityState(
+            entityId=self.username, helditem=self.helditem, chunkId=self.chunkId
+        )
         return es
 
     def set_state(self, state: EntityState) -> None:
@@ -60,6 +64,7 @@ class LogicalPlayer:
                 f"EntityState passed to LogicalPlayer.set_state has incorrect username ({self.username} != {state.entityID})"
             )
         self.helditem = state.helditem
+        self.chunkId = state.chunkId
 
     def getinv(self) -> list[Item]:
         return self.inventory
@@ -80,7 +85,10 @@ class LogicalPlayer:
 
     def getpos(self) -> EntityPos2D:
         return EntityPos2D(
-            entityID=self.username, x=self.logical_pos.x, y=self.logical_pos.y
+            entityID=self.username,
+            x=self.logical_pos.x,
+            y=self.logical_pos.y,
+            chunkId=self.chunkId,
         )
 
     def setpos(self, pos: EntityPos2D) -> None:
@@ -89,4 +97,5 @@ class LogicalPlayer:
                 logger.warning(
                     f"EntityState passed to LogicalPlayer.setpos has incorrect username ({self.username} != {state.entityID})"
                 )
+        self.chunkId = pos.chunkId
         self.logical_pos.x, self.logical_pos.y = pos.x, pos.y

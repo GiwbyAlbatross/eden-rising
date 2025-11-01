@@ -14,15 +14,16 @@ class EntityState(BaseModel):
     #                                # (unless using guest account, in which case its contents are ignored)
     #                                # hash is supplied in base64 encoding
     helditem: Optional[Item] = None  #  # only supplied if an item is being held
+    chunkId: int
 
 
 class EntityPos2D(BaseModel):
     entityID: Optional[str]  # must be provided if not provided in URL/URI
+    chunkId: int
     x: float
     y: float
 
 
 class WorldChunk(BaseModel):
-    x: int
-    y: int
+    chunkId: int
     contents: list[list[int]]  # numerical block ID is in use
