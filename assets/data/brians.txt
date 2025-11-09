@@ -18,7 +18,7 @@ Clumsy Brian
 Honest Brian
 Loving Brian
 Hateful Brian
-Neutral Brain
+Neutral Briin
 Conspiracy Theorist Brian
 Nice Brian
 Mean Brian
@@ -72,10 +72,10 @@ Angry Brian
 Loyal Brian
 Traitor Brian
 Careless Brian
-Gay Brian
 Suck Up Brian
 Selfish Brian
 Lonely Brian
+Gay Brian
 Homophobic Brian
 Country Brian
 Brave Brian
@@ -95,6 +95,7 @@ Crazy Brian
 Dreamy Brian
 Dancer Brian
 Funky Brian
+Brian Of Da Funk
 Gossip Brian
 Gangster Brian
 Helpless Brian
@@ -123,6 +124,7 @@ Teacher Brian
 Garage Band Brian
 Stoner Brian
 Lego Brian
+LEGO Brian
 Batman Brian
 Pilot Brian
 Choir Brian
@@ -133,7 +135,9 @@ American Brian
 Scottish Brian
 Drunk Brian
 A Lot Brian
+A Lot Of Brian
 Heartbreaker Brian
+Heartstopper Brian
 Singer Brian
 Fabulous Brian
 Quick Brian
@@ -247,7 +251,7 @@ Boy Band Brian
 K-Pop Brian
 Queen Fan Brian
 Watermelon Brian
-Earth Brian 
+Earth Brian
 Radical Brian
 Tame Brian
 YOLO Brian
@@ -255,13 +259,14 @@ Whimsical Brian
 Underestimated Brian
 Intolerant Brian 
 Observant Brian 
-Panic attack Brian 
+Panic Attack Brian 
 Awkward Brian
 Shallow Brian
 Dirty Brian
 Perfect Brian
 Frightened Brian
 Goth Brian
+The Cure Brian
 Hangry Brian
 Justice Brian
 Prisoner Brian
@@ -274,11 +279,13 @@ Xylophone Brian
 Chocolate Brian
 Vegan Brian
 Bro Brian
+Bruh Brian
 Nit Wit Brian
 Necromancer Brian 
 Medical Brian
 Researcher Brian
 Gibberish Brian
+Elliott Brian
 Elegant Brian
 Elephant Brian
 Tiger Brian
@@ -291,6 +298,7 @@ Korean Brian
 Canadian Brian
 Kiwi Brian
 Graffiti Brian
+Tagging Brian
 Librarian Brian
 Poser Brian
 Orphan Brian
@@ -298,3 +306,52 @@ wizard Brian
 Anti-Hero Brian 
 Bear Brian
 Fish Brian
+Ghost Brian
+Ghostbuster Brian
+Schitzophrenic Brian
+Punk Brian
+Porepunkah Brian
+Metalhead Brian
+Industrial Brian
+Bread Brian
+Pastry Chef Brian
+Pastry Brian
+Pastie Brian
+Nasty Pastie Brian
+Lawyer Brian
+Barrister Brian
+Barista Brian
+Messiah Brian
+Antifa Brian
+Fascist Brian
+Corporate Brian
+Tech Bro Brian
+Venture Capitalist Brian
+Antivaxx Brian
+In-Denial Brian
+YouTuber Brian
+Influencer Brian
+Streamer Brian
+Streaming Brian
+Screaming Brian
+Biblical Brian
+LARP Brian
+Medieval Brian
+Renaissance Brian
+Neoclassical Brian
+Neanderthal Brian
+Time Travel Brian
+Headless Brian
+Nearly Headless Brian
+Damaged Brian
+Mentally Damaged Brian
+Damaging Brian
+Damaging Winds Brian
+Damaging Winds For ALl Of Victoria Brian
+Talks in Their Sleep Brian
+Graduated Brian
+Sir Brian
+Madame Brian
+Meh Brian
+Olga The Brian
+RGB Lighting Brian
