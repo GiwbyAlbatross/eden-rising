@@ -11,3 +11,6 @@ __pycache__
 .ruff_cache
 .mypy_cache
 .pytest_cache
+
+# testing code
+deleteme.py

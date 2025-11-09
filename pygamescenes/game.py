@@ -51,7 +51,6 @@ class AbstractGame(abc.ABC):
         "initialise this game"
         pass
 
-    @abc.abstractmethod
     def process_event(self, event: pygame.event.Event) -> None:
         "process event"
         if event.type == _constants.EventIDs.QUIT:
@@ -137,8 +136,9 @@ class BaseGame(AbstractGame):
         *,
         open_window: bool = False,
         screen: Optional[pygame.Surface] = None,
+        tick_rate: int=AbstractGame.TICK_RATE
     ) -> None:
-        super().__init__(scr_size, dpy_flags, open_window=open_window, screen=screen)
+        super().__init__(scr_size, dpy_flags, open_window=open_window, screen=screen, tick_rate=tick_rate)
         self.backdrop = pygame.Surface(scr_size)
         self.rendered = pygame.sprite.Group()
         self.updated = pygame.sprite.Group()

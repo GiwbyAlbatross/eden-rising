@@ -4,18 +4,26 @@ import argparse
 import pygame  # ?
 import pygamescenes
 import eden
+import eden.client
 
 eden.IS_SERVER = False
 
+logging.basicConfig(format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s", datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
-
 
 class EdenRisingClient(pygamescenes.game.BaseGame):
     TICK_RATE = 1000 // eden.constants.TICK_RATE
-    me: eden.player.RenderedPlayer
+    me: eden.client.player.RenderedPlayer
+    twochunks: pygame.Surface
+    lastchunkId: int
 
     def init(self, **kwargs):
         self.me = eden.client.player.Brian()
+        chunkId = self.me.chunkId
+        self.lastchunkId = chunkId
+        self.twochunks = pygame.Surface([640, 352])
+        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))
+        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1), (320,0)))
 
     def update_tick(self) -> None:
         "tick entities and do network sync multiplayer stuff"
@@ -36,17 +44,25 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
 
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
-        twochunks = pygame.Surface([2560, 704])
-        self.scr.blit(self.backdrop, (0, 0))
+        print("rendering frame")
+        chunkId = self.me.chunkId
+        if self.lastchunkId != chunkId:
+            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))
+            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1)), (320,0))
+        self.lastchunkId = chunkId
+        self.scr.blit(self.twochunks, (0, 0))
         for entity in self.rendered:
             entity.render(self.scr)
         return self.scr
+    def update_frame(self, dt: float=1/60) -> None:
+        pass
+    def cleanup(self) -> None:
+        pass
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # add arguments, etc
     args = parser.parse_args()
-    game = EdenRisingClient(...)
-    game.init()
+    game = EdenRisingClient([1280,720], open_window=True, tick_rate=eden.constants.TICK_RATE)
     pygamescenes.run_game(game)
