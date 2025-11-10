@@ -34,6 +34,7 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         self.logical_pos.x = (
             0 - self.rect.centerx / 64
         )  # Vector2 class which lacks stuff and is slow
+
     def tick(self) -> None:
         pass
 
@@ -68,4 +69,4 @@ def init():
             f"Idle Brian Texture path {idlebrianpath!r} does not exist, using blank pink surface."
         )
         Brian.idleimg = pygame.Surface(BRIAN_SIZE)
-        Brian.idleimg.fill([255,0,255])
+        Brian.idleimg.fill([255, 0, 255])

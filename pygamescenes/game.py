@@ -137,9 +137,15 @@ class BaseGame(AbstractGame):
         *,
         open_window: bool = False,
         screen: Optional[pygame.Surface] = None,
-        tick_rate: int=AbstractGame.TICK_RATE
+        tick_rate: int = AbstractGame.TICK_RATE,
     ) -> None:
-        super().__init__(scr_size, dpy_flags, open_window=open_window, screen=screen, tick_rate=tick_rate)
+        super().__init__(
+            scr_size,
+            dpy_flags,
+            open_window=open_window,
+            screen=screen,
+            tick_rate=tick_rate,
+        )
         self.backdrop = pygame.Surface(scr_size)
         self.rendered = pygame.sprite.Group()
         self.updated = pygame.sprite.Group()

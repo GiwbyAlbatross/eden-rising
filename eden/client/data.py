@@ -14,7 +14,7 @@ rsrclocfile = "assets/data/resourcelocations.toml"
 texturelocations: Optional[dict] = None
 
 
-def get_texturelocation(loc: str, fallback: str=''):
+def get_texturelocation(loc: str, fallback: str = ""):
     global texturelocations
     if texturelocations is None:
         logger.info(f"ResourceLocations file not loaded. Loading {rsrclocfile!r}")

@@ -8,8 +8,11 @@ import eden.client
 
 eden.IS_SERVER = False
 
-logging.basicConfig(format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s", datefmt="%H:%M:%S")
+logging.basicConfig(
+    format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s", datefmt="%H:%M:%S"
+)
 logger = logging.getLogger(__name__)
+
 
 class EdenRisingClient(pygamescenes.game.BaseGame):
     TICK_RATE = 1000 // eden.constants.TICK_RATE
@@ -22,8 +25,8 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         chunkId = self.me.chunkId
         self.lastchunkId = chunkId
         self.twochunks = pygame.Surface([640, 352])
-        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))
-        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1)), (320,0))
+        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0))
 
     def update_tick(self) -> None:
         "tick entities and do network sync multiplayer stuff"
@@ -46,15 +49,19 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
         chunkId = self.me.chunkId
         if self.lastchunkId != chunkId:
-            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))
-            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1)), (320,0))
+            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+            self.twochunks.blit(
+                self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
+            )
         self.lastchunkId = chunkId
         self.scr.blit(self.twochunks, (0, 0))
         for entity in self.rendered:
             entity.render(self.scr)
         return self.scr
-    def update_frame(self, dt: float=1/60) -> None:
+
+    def update_frame(self, dt: float = 1 / 60) -> None:
         pass
+
     def cleanup(self) -> None:
         pass
 
@@ -63,5 +70,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # add arguments, etc
     args = parser.parse_args()
-    game = EdenRisingClient([1280,720], open_window=True, tick_rate=eden.constants.TICK_RATE)
+    game = EdenRisingClient(
+        [1280, 720], open_window=True, tick_rate=eden.constants.TICK_RATE
+    )
     pygamescenes.run_game(game)
