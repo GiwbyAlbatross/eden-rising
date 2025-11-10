@@ -3,6 +3,7 @@ import abc
 from typing import Optional, Callable
 from functools import wraps
 import pygame
+import pygame.locals as _locals
 from . import constants as _constants
 
 
@@ -53,7 +54,7 @@ class AbstractGame(abc.ABC):
 
     def process_event(self, event: pygame.event.Event) -> None:
         "process event"
-        if event.type == _constants.EventIDs.QUIT:
+        if event.type == _locals.QUIT:
             self.running = False
 
     @abc.abstractmethod

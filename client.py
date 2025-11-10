@@ -23,7 +23,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.lastchunkId = chunkId
         self.twochunks = pygame.Surface([640, 352])
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))
-        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1), (320,0)))
+        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId+1)), (320,0))
 
     def update_tick(self) -> None:
         "tick entities and do network sync multiplayer stuff"
@@ -44,7 +44,6 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
 
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
-        print("rendering frame")
         chunkId = self.me.chunkId
         if self.lastchunkId != chunkId:
             self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0,0))

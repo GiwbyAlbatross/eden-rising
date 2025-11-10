@@ -12,7 +12,7 @@ def run_game(game: game.AbstractGame, *init_args, **init_kwargs) -> int:
     game.init(*init_args, **init_kwargs)
     while game.running:
         game.clk.tick(game.TARGET_FPS)
-        print("FPS:", game.clk.get_fps())
+        print("FPS:", game.clk.get_fps(), end='\r')
         game.process_events(pygame.event.get())
         game.render_frame()
         pygame.display.flip()
