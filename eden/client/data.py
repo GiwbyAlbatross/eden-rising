@@ -17,8 +17,8 @@ texturelocations: Optional[dict] = None
 def get_texturelocation(loc: str, fallback: str = ""):
     global texturelocations
     if texturelocations is None:
-        logger.info(f"ResourceLocations file not loaded. Loading {rsrclocfile!r}")
-        texturelocations = tomli.load(open(rsrclocfile))
+        logger.info(f"ResourceLocations file previously not loaded. Loading {rsrclocfile!r}")
+        texturelocations = tomli.load(open(rsrclocfile, 'rb'))
     subkeys = loc.split(".")
     table = texturelocations
     for key in subkeys:

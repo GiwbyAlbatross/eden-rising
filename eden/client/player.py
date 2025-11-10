@@ -3,7 +3,7 @@ import logging
 import pygame
 from pygamescenes.entity import AbstractEntity
 from eden.gfxutil import render_text, loadimg
-from eden.constants import TRANSPARENT
+from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT
 from eden.logic import LogicalPlayer
 from .data import get_texturelocation
 
@@ -17,27 +17,41 @@ brianlogger = logging.getLogger(__name__ + ".Brian")
 
 class RenderedPlayer(AbstractEntity, LogicalPlayer):
     GRAVITY_ACCEL: float = 98.0
+    JUMP_HEIGHT: float = 50.0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def process_keystrokes(self):
         pressed_keys = pygame.key.get_pressed()
+        self.mv.x = 0.0
+        if pressed_keys[MV_LEFT]:
+            self.mv.x -= 64.0 # pixels per second
+        if pressed_keys[MV_RIGHT]:
+            self.mv.x += 64.0 # pixels per second
+        if pressed_keys[MV_JUMP]:
+            self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 60):
-        process_keystrokes()
+        if self.is_on_ground():
+            self.mv.y = -(abs(self.mv.y))
+            self.logical_pos.y = 0.0
+        else:
+            self.mv.y += self.GRAVITY_ACCEL*dt
+        self.process_keystrokes()
         mv = self.mv * dt
         self.rect.move_ip(mv)
-        self.logical_pos.y = (
-            0 - self.rect.centery / 64
-        )  # note that logical_pos is an awful homemade
-        self.logical_pos.x = (
-            0 - self.rect.centerx / 64
-        )  # Vector2 class which lacks stuff and is slow
+        self.logical_pos.y = (704 - self.rect.centery) / 64
+        # note that logical_pos is an awful homemade
+        # Vector2 class which lacks stuff and is slow
+        self.logical_pos.x = self.rect.centerx / 64
+        if self.logical_pos.x > 16:
+            self.logical_pos.x -= 16.0
+            self.chunkId += 1
 
     def tick(self) -> None:
         pass
-
+ 
 
 class Brian(RenderedPlayer):
     mv: pygame.Vector2
@@ -49,6 +63,9 @@ class Brian(RenderedPlayer):
         self.surf = pygame.Surface(BRIAN_SIZE, TRANSPARENT)
         self.rect = self.surf.get_rect(center=pos)
         self.mv = pygame.Vector2(0.0, 0.0)
+    def update(self, dt: float=1/60):
+        super().update(dt)
+        self.surf.blit(self.idleimg, (0,0))
 
     def render_nametag(self, surf: pygame.Surface):
         s = render_text(self.username.strip(" ") + " Brian")
@@ -59,7 +76,7 @@ class Brian(RenderedPlayer):
 def init():
     idlebrianpath = os.path.join(
         get_texturelocation("entity.brian.root"),
-        get_texturelocation("etity.brian.idle"),
+        get_texturelocation("entity.brian.idle"),
     )
     if os.path.exists(idlebrianpath):
         Brian.idleimg = pygame.transform.scale_by(loadimg(idlebrianpath), 4)
@@ -69,4 +86,4 @@ def init():
             f"Idle Brian Texture path {idlebrianpath!r} does not exist, using blank pink surface."
         )
         Brian.idleimg = pygame.Surface(BRIAN_SIZE)
-        Brian.idleimg.fill([255, 0, 255])
+        Brian.idleimg.fill([0, 255, 0])

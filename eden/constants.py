@@ -6,5 +6,8 @@ except ModuleNotFoundError:
     )
 else:
     TRANSPARENT = _locals.SRCALPHA
+    MV_LEFT  = _locals.K_z
+    MV_RIGHT = _locals.K_c
+    MV_JUMP  = _locals.K_x
 PORT = 7776
 TICK_RATE = 2

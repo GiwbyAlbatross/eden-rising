@@ -18,6 +18,8 @@ class Vector2:
             self.x, self.y = x, x
         else:
             self.x, self.y = x, y
+    def __repr__(self) -> str:
+        return f"<Vector2 (giwby-implementation) x: {self.x}, y: {self.y}>"
 
 
 class LogicalPlayer:
@@ -42,7 +44,7 @@ class LogicalPlayer:
 
     def is_on_ground(self):
         # presently just checks if you're on the floor but it will in future do block-collision
-        self.logical_pos.y <= 0.0
+        return self.logical_pos.y < 0.0
 
     def tick(self) -> None:
         if not self.is_on_ground():

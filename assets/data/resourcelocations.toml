@@ -9,7 +9,7 @@ notfound = 'assets/textures/block/notfound.png'
 [entity]
 notfound = 'assets/textures/entity/notfound.png'
 [entity.brian]
-root = 'assets/textures/entity/brian/'
-idle = 'idle.png'
+root = 'assets/textures/brian/'
+idle = 'idle.PNG'
 # loops through this list when pkaying walking animation
-walk = ['idle.png'] # TODO: add animation frames
+walk = ['idle.PNG'] # TODO: add animation frames

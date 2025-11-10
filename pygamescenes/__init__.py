@@ -11,9 +11,10 @@ from . import entity
 def run_game(game: game.AbstractGame, *init_args, **init_kwargs) -> int:
     game.init(*init_args, **init_kwargs)
     while game.running:
-        game.clk.tick(game.TARGET_FPS)
-        print("FPS:", game.clk.get_fps(), end="\r")
+        dt = game.clk.tick(game.TARGET_FPS)
+        print(f"FPS: {game.clk.get_fps():.3f}", end="\r")
         game.process_events(pygame.event.get())
+        game.update_frame(dt*0.001)
         game.render_frame()
         pygame.display.flip()
     game.cleanup()

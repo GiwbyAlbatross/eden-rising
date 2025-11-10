@@ -21,6 +21,7 @@ class AbstractGame(abc.ABC):
     TARGET_FPS: int = 60
     _eventhandlers: dict[str, set[Callable]]
     clk: pygame.time.Clock
+    time: float # time alive
 
     def __init__(
         self,
@@ -46,6 +47,7 @@ class AbstractGame(abc.ABC):
         self._eventhandlers = {}
         self.registerhandler(self.TICK_EVENT, self.update_tick)
         pygame.time.set_timer(self.TICK_EVENT, tick_rate)
+        self.time = 0.0
 
     @abc.abstractmethod
     def init(self, *args, **kwargs) -> None:
@@ -151,21 +153,17 @@ class BaseGame(AbstractGame):
         self.updated = pygame.sprite.Group()
         self.ticked = pygame.sprite.Group()
 
-    @abc.abstractmethod
     def render_frame(self) -> pygame.surface.Surface:
         self.scr.blit(self.backdrop, (0, 0))
         for entity in self.rendered:
             entity.render(self.scr)
         return self.scr
 
-    @abc.abstractmethod
     def update_frame(self, dt: float = 1 / 60) -> None:
+        self.time += dt
         for entity in self.ticked:
             entity.update(dt)
 
-    @abc.abstractmethod
     def update_tick(self) -> None:
         for entity in self.ticked:
-            if entity not in self.entities:
-                self.entities.add(entity)  # add unknown entity to entities list
             entity.tick()
