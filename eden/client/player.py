@@ -16,8 +16,10 @@ brianlogger = logging.getLogger(__name__ + ".Brian")
 
 
 class RenderedPlayer(AbstractEntity, LogicalPlayer):
-    GRAVITY_ACCEL: float = 98.0
-    JUMP_HEIGHT: float = 50.0
+    GRAVITY_ACCEL: float = 980.0
+    JUMP_HEIGHT: float = 363.6
+    BOUNCINESS: float = 0.5
+    SPEED: float = 128.0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,22 +28,22 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         pressed_keys = pygame.key.get_pressed()
         self.mv.x = 0.0
         if pressed_keys[MV_LEFT]:
-            self.mv.x -= 64.0 # pixels per second
+            self.mv.x -= self.SPEED # pixels per second
         if pressed_keys[MV_RIGHT]:
-            self.mv.x += 64.0 # pixels per second
-        if pressed_keys[MV_JUMP]:
+            self.mv.x += self.SPEED # pixels per second
+        if pressed_keys[MV_JUMP] and self.is_on_ground():
             self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 60):
         if self.is_on_ground():
-            self.mv.y = -(abs(self.mv.y))
+            self.mv.y = -(abs(self.mv.y)*self.BOUNCINESS)
             self.logical_pos.y = 0.0
         else:
             self.mv.y += self.GRAVITY_ACCEL*dt
         self.process_keystrokes()
         mv = self.mv * dt
         self.rect.move_ip(mv)
-        self.logical_pos.y = (704 - self.rect.centery) / 64
+        self.logical_pos.y = (704 - self.rect.bottom) / 64
         # note that logical_pos is an awful homemade
         # Vector2 class which lacks stuff and is slow
         self.logical_pos.x = self.rect.centerx / 64
@@ -57,7 +59,7 @@ class Brian(RenderedPlayer):
     mv: pygame.Vector2
     idleimg: pygame.Surface
 
-    def __init__(self, trait: str = "Boring", pos: tuple[int, int] = (0, scr_h - 16)):
+    def __init__(self, trait: str = "Boring", pos: tuple[int, int] = (0, scr_h - 200)):
         super().__init__()
         self.init(trait, pos)
         self.surf = pygame.Surface(BRIAN_SIZE, TRANSPARENT)
@@ -83,7 +85,7 @@ def init():
     else:
         logger.error(f"Idle Brian Texture path {idlebrianpath!r} does not exist.")
         brianlogger.warn(
-            f"Idle Brian Texture path {idlebrianpath!r} does not exist, using blank pink surface."
+            f"Idle Brian Texture path {idlebrianpath!r} does not exist, using blank green surface."
         )
         Brian.idleimg = pygame.Surface(BRIAN_SIZE)
         Brian.idleimg.fill([0, 255, 0])

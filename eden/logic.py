@@ -44,7 +44,7 @@ class LogicalPlayer:
 
     def is_on_ground(self):
         # presently just checks if you're on the floor but it will in future do block-collision
-        return self.logical_pos.y < 0.0
+        return self.logical_pos.y <= 0.0
 
     def tick(self) -> None:
         if not self.is_on_ground():

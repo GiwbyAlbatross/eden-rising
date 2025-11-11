@@ -22,6 +22,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     me: eden.client.player.RenderedPlayer
     twochunks: pygame.Surface
     lastchunkId: int
+    chunk_render_offset: int # in pixels
 
     def init(self, **kwargs):
         self.me = eden.client.player.Brian()
@@ -29,7 +30,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.rendered.add(self.me)
         self.ticked.add(self.me)
         self.lastchunkId = chunkId
-        self.twochunks = pygame.Surface([640, 352])
+        self.chunk_render_offset = 0
+        logger.info("Rendering world (first time).")
+        self.twochunks = pygame.Surface([640, 176])
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0))
 
@@ -39,26 +42,36 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             entity.tick()
 
     def load_chunk(self, chunkId: int) -> list[list[int]]:
-        return []
+        return [[0 for _ in range(20)] for _ in range(11)]
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
+        blocktypes = [] # paths to block textures, TODO: use eden.client.data
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
-        # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 2x later
+        # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
-        rendered.fill([255, 0, 255])  # TODO: render actual blocks in chunk
+        rendered.fill([255, 0, 200])  # TODO: render actual blocks in chunk
+        for y, blks in enumerate(chunk):
+            for x, blktype in enumerate(blks):
+                try:
+                    blktxtr = eden.gfxutil.loadimg(blocktypes[blktype])
+                except IndexError:
+                    #logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
+                    blktxtr = eden.gfxutil.create_notfound([16,16])
+                rendered.blit(blktxtr, (x*16, y*16))
         return rendered
 
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
         chunkId = self.me.chunkId
         if self.lastchunkId != chunkId:
+            logger.info("Rendering world (again).")
             self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
             self.twochunks.blit(
                 self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
             )
-        self.lastchunkId = chunkId
+            self.lastchunkId = chunkId
         self.scr.fill([0,0,0])
-        self.scr.blit(self.twochunks, (0, 0))
+        self.scr.blit(pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0))
         for entity in self.rendered:
             entity.render(self.scr)
         f3txt = eden.gfxutil.render_text(f"chunkId: {chunkId!r}, logical_pos: {self.me.logical_pos!r}, render_pos: {self.me.rect.center}", 0, 12)
