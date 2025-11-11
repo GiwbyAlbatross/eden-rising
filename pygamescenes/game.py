@@ -101,6 +101,7 @@ class AbstractGame(abc.ABC):
         "clever decorator to register event handlers"
 
         def _decorator(func: Callable) -> Callable:
+            "returned decorator"
             self._eventhandlers[event_id].add(func)
             return func
 

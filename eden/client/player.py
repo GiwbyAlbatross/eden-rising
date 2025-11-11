@@ -2,6 +2,7 @@ import os.path
 import logging
 import pygame
 from pygamescenes.entity import AbstractEntity
+import eden
 from eden.gfxutil import render_text, loadimg
 from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT
 from eden.logic import LogicalPlayer
@@ -18,7 +19,7 @@ brianlogger = logging.getLogger(__name__ + ".Brian")
 class RenderedPlayer(AbstractEntity, LogicalPlayer):
     GRAVITY_ACCEL: float = 980.0
     JUMP_HEIGHT: float = 363.6
-    BOUNCINESS: float = 0.5
+    BOUNCINESS: float = 0.45
     SPEED: float = 128.0
 
     def __init__(self, *args, **kwargs):
@@ -49,7 +50,14 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         self.logical_pos.x = self.rect.centerx / 64
         if self.logical_pos.x > 16:
             self.logical_pos.x -= 16.0
+            self.rect.centerx = self.logical_pos.x*64
             self.chunkId += 1
+            pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1))
+        elif self.logical_pos.x < 0:
+            self.logical_pos.x += 16.0
+            self.rect.centerx = self.logical_pos.x*64
+            self.chunkId -= 1
+            pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=-1))
 
     def tick(self) -> None:
         pass
