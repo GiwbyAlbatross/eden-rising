@@ -19,7 +19,7 @@ class Vector2:
         else:
             self.x, self.y = x, y
     def __repr__(self) -> str:
-        return f"<Vector2 (giwby-implementation) x: {self.x}, y: {self.y}>"
+        return f"<Vector2 (giwby-implementation) x: {self.x:.3f}, y: {self.y:.3f}>"
 
 
 class LogicalPlayer:

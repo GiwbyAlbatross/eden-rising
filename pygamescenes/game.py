@@ -154,6 +154,10 @@ class BaseGame(AbstractGame):
         self.updated = pygame.sprite.Group()
         self.ticked = pygame.sprite.Group()
 
+    @abc.abstractmethod
+    def handle_keydown(self, event: pygame.event.Event):
+        pass
+
     def render_frame(self) -> pygame.surface.Surface:
         self.scr.blit(self.backdrop, (0, 0))
         for entity in self.rendered:

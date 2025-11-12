@@ -14,10 +14,11 @@ logging.basicConfig(
     filename='/dev/stdout' if sys.stdout.isatty() or (not __debug__) else LOG_LOCATION,
     level=(logging.DEBUG if __debug__ else logging.INFO)
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(f"client({__name__})")
 
 
 class EdenRisingClient(pygamescenes.game.BaseGame):
+    TARGET_FPS: int = 50
     TICK_RATE = 1000 // eden.constants.TICK_RATE
     me: eden.client.player.RenderedPlayer
     twochunks: pygame.Surface
@@ -26,7 +27,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     pandirection: int
 
     def init(self, **kwargs):
-        self.me = eden.client.player.Brian()
+        self.me = eden.client.player.Brian(pos=(200, self.scr_h - 200))
         chunkId = self.me.chunkId
         self.rendered.add(self.me)
         self.ticked.add(self.me)
@@ -66,25 +67,29 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
         scrollspeed = 0.1
-        targetoffset = 1280 if self.pandirection>0 else 0
+        #targetoffset = 0 if self.pandirection>0 else 1280
+        targetoffset = 0
         chunkId = self.me.chunkId
-        if self.lastchunkId != chunkId and self.chunk_render_offset == targetoffset:
-            logger.info("Rendering world (again).")
-            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
-            self.twochunks.blit(
-                self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
-            )
-            self.lastchunkId = chunkId
-            self.chunk_render_offset = 0
-        #self.scr.fill([0,0,0])
+        #if self.lastchunkId != chunkId and self.chunk_render_offset == round(targetoffset):
+        #    logger.info("Rendering world (again).")
+        #    self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+        #    self.twochunks.blit(
+        #        self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
+        #    )
+        #    self.lastchunkId = chunkId
+        #    self.chunk_render_offset = 0
+        self.scr.fill([0,0,0])
         self.scr.blit(pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0))
         for entity in self.rendered:
             entity.render(self.scr)
-        f3txt = eden.gfxutil.render_text(f"chunkId: {chunkId!r}, logical_pos: {self.me.logical_pos!r}, render_pos: {self.me.rect.center}", 0, 12)
-        f3rect= f3txt.get_rect(topleft=(16, 704))
+        f3txt = eden.gfxutil.render_text((f"chunkId: {chunkId!r}, "
+                                          f"logical_pos: {self.me.logical_pos!r}, "
+                                          f"render_pos: {self.me.rect.center}, "
+                                          f"chunkrenderoffset: {self.chunk_render_offset:.3f},"), 0, 12)
+        f3rect= f3txt.get_rect(topleft=(16, 708))
         self.scr.fill([64,64,64], f3rect)
         self.scr.blit(f3txt, f3rect)
-        self.chunk_render_offset = (self.chunk_render_offset+targetoffset*scrollspeed) / 1+scrollspeed
+        self.chunk_render_offset = (self.chunk_render_offset+targetoffset*scrollspeed) / (1+scrollspeed)
         return self.scr
 
     def pan_event_handler(self, event: pygame.event.Event):
@@ -92,14 +97,18 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.pandirection = direction
         if direction > 0:
             # moving right
-            self.chunk_render_offset = 0
+            self.chunk_render_offset = 1280
         else:
             # moving left
-            self.chunk_render_offset = 1280
-        logger.info(f"Handled pan event: direction: {event.direction!r}")
+            self.chunk_render_offset = -1280
+        self.me.chunkId += direction
+        logger.debug(f"Handled pan event: direction: {event.direction!r}")
 
     #def update_frame(self, dt: float = 1 / 60) -> None:
     #    pass
+
+    def handle_keydown(self, event: pygame.event.Event) -> None:
+        pass
 
     def cleanup(self) -> None:
         pass

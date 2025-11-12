@@ -51,12 +51,12 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         if self.logical_pos.x > 16:
             self.logical_pos.x -= 16.0
             self.rect.centerx = self.logical_pos.x*64
-            self.chunkId += 1
+            #self.chunkId += 1
             pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1))
         elif self.logical_pos.x < 0:
             self.logical_pos.x += 16.0
             self.rect.centerx = self.logical_pos.x*64
-            self.chunkId -= 1
+            #self.chunkId -= 1
             pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=-1))
 
     def tick(self) -> None:
