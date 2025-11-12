@@ -76,7 +76,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             )
             self.lastchunkId = chunkId
             self.chunk_render_offset = 0
-        self.scr.fill([0,0,0])
+        #self.scr.fill([0,0,0])
         self.scr.blit(pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0))
         for entity in self.rendered:
             entity.render(self.scr)
