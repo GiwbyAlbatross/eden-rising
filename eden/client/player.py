@@ -17,8 +17,8 @@ brianlogger = logging.getLogger(__name__ + ".Brian")
 
 
 class RenderedPlayer(AbstractEntity, LogicalPlayer):
-    GRAVITY_ACCEL: float = 980.0
-    JUMP_HEIGHT: float = 363.6
+    GRAVITY_ACCEL: float = 2048.0
+    JUMP_HEIGHT: float = 555.5
     BOUNCINESS: float = 0.45
     SPEED: float = 128.0
 
@@ -49,7 +49,7 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         # Vector2 class which lacks stuff and is slow
         self.logical_pos.x = self.rect.centerx / 64
         if self.logical_pos.x > 16:
-            self.logical_pos.x -= 16.0
+            #self.logical_pos.x -= 16.0
             self.rect.centerx = self.logical_pos.x*64
             #self.chunkId += 1
             pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1))

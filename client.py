@@ -24,6 +24,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     twochunks: pygame.Surface
     lastchunkId: int
     chunk_render_offset: int # in pixels
+    ispanning: bool
     pandirection: int
 
     def init(self, **kwargs):
@@ -67,8 +68,8 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
         scrollspeed = 0.1
-        #targetoffset = 0 if self.pandirection>0 else 1280
-        targetoffset = 0
+        targetoffset = 1280 if self.pandirection>0 else 0
+        #targetoffset = 0
         chunkId = self.me.chunkId
         #if self.lastchunkId != chunkId and self.chunk_render_offset == round(targetoffset):
         #    logger.info("Rendering world (again).")
@@ -78,6 +79,20 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         #    )
         #    self.lastchunkId = chunkId
         #    self.chunk_render_offset = 0
+        if self.lastchunkId != chunkId:
+            logger.info("Rendering world (again).")
+            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+            self.twochunks.blit(
+                self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
+            )
+            self.lastchunkId = chunkId
+        if self.pandirection>0 and self.chunk_render_offset > 1279:
+            self.me.chunkId += 1
+            self.me.logical_pos -= 16.0
+            self.chunk_render_offset = 0.0
+            self.ispanning = False
+        elif self.pandirection<0 and self.chunk_render_offset < 1:
+            self.ispanning = False
         self.scr.fill([0,0,0])
         self.scr.blit(pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0))
         for entity in self.rendered:
@@ -95,13 +110,14 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     def pan_event_handler(self, event: pygame.event.Event):
         direction = event.direction
         self.pandirection = direction
+        self.ispanning = True
         if direction > 0:
             # moving right
-            self.chunk_render_offset = 1280
+            self.chunk_render_offset = 0
         else:
             # moving left
             self.chunk_render_offset = -1280
-        self.me.chunkId += direction
+            self.me.chunkId += direction
         logger.debug(f"Handled pan event: direction: {event.direction!r}")
 
     #def update_frame(self, dt: float = 1 / 60) -> None:
