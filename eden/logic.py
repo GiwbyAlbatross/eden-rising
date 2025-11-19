@@ -18,6 +18,7 @@ class Vector2:
             self.x, self.y = x, x
         else:
             self.x, self.y = x, y
+
     def __repr__(self) -> str:
         return f"<Vector2 (giwby-implementation) x: {self.x:.3f}, y: {self.y:.3f}>"
 
@@ -46,12 +47,12 @@ class LogicalPlayer:
         # presently just checks if you're on the floor but it will in future do block-collision
         return self.logical_pos.y <= 0.0
 
-    def tick(self) -> None:
-        if not self.is_on_ground():
-            self.mv.y += (
-                self.GRAVITY_ACCEL / 20
-            )  # 20 ticks where this sorta stuff is processed
-            #                                  # networking happens at other times, in threads
+    #def tick(self) -> None:
+    #    if not self.is_on_ground():
+    #        self.mv.y += (
+    #            self.GRAVITY_ACCEL / 20
+    #        )  # 20 ticks where this sorta stuff is processed
+    #        #  # networking happens at other times, in threads
 
     def get_state(self) -> EntityState:
         # more state attributes will be added later but for now forget it

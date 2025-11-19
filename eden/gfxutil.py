@@ -9,15 +9,18 @@ def render_text(text: str, line: int = 0, font_size: int = 16, **kwargs):
     surf = font.render(text, True, kwargs.get("text_colour", (255, 255, 255)))
     return surf
 
-def create_notfound(size: Sequence=[2,2]) -> pygame.surface.Surface:
-    tiny = pygame.Surface([2,2])
-    tiny.set_at((0,0), [255,0,255])
-    tiny.set_at((1,1), [255,25,255])
-    tiny.set_at((0,1), (25,25,25))
-    tiny.set_at((1,0), (25,25,25))
+
+def create_notfound(size: Sequence = [2, 2]) -> pygame.surface.Surface:
+    tiny = pygame.Surface([2, 2])
+    tiny.set_at((0, 0), [255, 0, 255])
+    tiny.set_at((1, 1), [255, 25, 255])
+    tiny.set_at((0, 1), (25, 25, 25))
+    tiny.set_at((1, 0), (25, 25, 25))
     return pygame.transform.scale(tiny, size)
 
+
 imgcache: dict[str, pygame.surface.Surface] = {}
+
 
 def loadimg(path, *args, **kwargs):
     "load an image to a pygame surface, but it won't reload images that have already been reloaded, instead returning a reference"

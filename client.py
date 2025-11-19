@@ -7,12 +7,13 @@ import eden
 import eden.client
 
 eden.IS_SERVER = False
-LOG_LOCATION = 'eden-rising-client-latest.log'
+LOG_LOCATION = "eden-rising-client-latest.log"
 
 logging.basicConfig(
-    format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s", datefmt="%H:%M:%S",
-    filename='/dev/stdout' if sys.stdout.isatty() or (not __debug__) else LOG_LOCATION,
-    level=(logging.DEBUG if __debug__ else logging.INFO)
+    format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s",
+    datefmt="%H:%M:%S",
+    filename="/dev/stdout" if sys.stdout.isatty() or (not __debug__) else LOG_LOCATION,
+    level=(logging.DEBUG if __debug__ else logging.INFO),
 )
 logger = logging.getLogger(f"client({__name__})")
 
@@ -23,9 +24,10 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     me: eden.client.player.RenderedPlayer
     twochunks: pygame.Surface
     lastchunkId: int
-    chunk_render_offset: int # in pixels
+    chunk_render_offset: int  # in pixels
     ispanning: bool
     pandirection: int
+    justdidflags: dict
 
     def init(self, **kwargs):
         self.me = eden.client.player.Brian(pos=(200, self.scr_h - 200))
@@ -33,8 +35,10 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.rendered.add(self.me)
         self.ticked.add(self.me)
         self.lastchunkId = chunkId
+        self.ispanning = False
         self.pandirection = 0
         self.chunk_render_offset = 0
+        self.justdidflags = {'pan':False}
         logger.info("Rendering world (first time).")
         self.twochunks = pygame.Surface([640, 176])
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
@@ -50,7 +54,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         return [[0 for _ in range(20)] for _ in range(11)]
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
-        blocktypes = [] # paths to block textures, TODO: use eden.client.data
+        blocktypes = []  # paths to block textures, TODO: use eden.client.data
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
         # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
@@ -60,18 +64,18 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 try:
                     blktxtr = eden.gfxutil.loadimg(blocktypes[blktype])
                 except IndexError:
-                    #logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
-                    blktxtr = eden.gfxutil.create_notfound([16,16])
-                rendered.blit(blktxtr, (x*16, y*16))
+                    # logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
+                    blktxtr = eden.gfxutil.create_notfound([16, 16])
+                rendered.blit(blktxtr, (x * 16, y * 16))
         return rendered
 
     def render_frame(self) -> pygame.surface.Surface:
         "render self.rendered entities to screen, doing terraria-like faux-camera movement stuff"
         scrollspeed = 0.1
-        targetoffset = 1280 if self.pandirection>0 else 0
-        #targetoffset = 0
+        targetoffset = 0 if self.pandirection < 0 else -1280
+        # targetoffset = 0
         chunkId = self.me.chunkId
-        #if self.lastchunkId != chunkId and self.chunk_render_offset == round(targetoffset):
+        # if self.lastchunkId != chunkId and self.chunk_render_offset == round(targetoffset):
         #    logger.info("Rendering world (again).")
         #    self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
         #    self.twochunks.blit(
@@ -79,6 +83,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         #    )
         #    self.lastchunkId = chunkId
         #    self.chunk_render_offset = 0
+        self.justdidflags['pan'] = False
         if self.lastchunkId != chunkId:
             logger.info("Rendering world (again).")
             self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
@@ -86,29 +91,49 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
             )
             self.lastchunkId = chunkId
-        if self.pandirection>0 and self.chunk_render_offset > 1279:
+        if self.pandirection > 0 and self.chunk_render_offset < -1279 and self.ispanning:
+            logger.debug(f"render_frame pandirection>0 handler triggered")
             self.me.chunkId += 1
-            self.me.logical_pos -= 16.0
+            self.me.logical_pos.x -= eden.constants.CHUNK_WIDTH
+            self.me.rect.centerx = self.me.logical_pos.x * 64
             self.chunk_render_offset = 0.0
             self.ispanning = False
-        elif self.pandirection<0 and self.chunk_render_offset < 1:
+            self.justdidflags['pan'] = True
+            logger.debug(f"x: {self.me.logical_pos.x}")
+        elif self.pandirection < 0 and self.chunk_render_offset > -1 and self.ispanning:
+            logger.debug(f"render_frame pandirection<0 handler triggered")
             self.ispanning = False
-        self.scr.fill([0,0,0])
-        self.scr.blit(pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0))
+            self.chunk_render_offset = 0.0
+            self.justdidflags['pan'] = True
+        self.scr.fill([0, 0, 0])
+        self.scr.blit(
+            pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0)
+        )
         for entity in self.rendered:
             entity.render(self.scr)
-        f3txt = eden.gfxutil.render_text((f"chunkId: {chunkId!r}, "
-                                          f"logical_pos: {self.me.logical_pos!r}, "
-                                          f"render_pos: {self.me.rect.center}, "
-                                          f"chunkrenderoffset: {self.chunk_render_offset:.3f},"), 0, 12)
-        f3rect= f3txt.get_rect(topleft=(16, 708))
-        self.scr.fill([64,64,64], f3rect)
+        f3txt = eden.gfxutil.render_text(
+            (
+                f"chunkId: {chunkId!r}, "
+                f"logical_pos: {self.me.logical_pos!r}, "
+                f"render_pos: {self.me.rect.center}, "
+                f"chunkrenderoffset: {self.chunk_render_offset:.3f}, "
+                f"ispanning: {self.ispanning}, pandirection: {self.pandirection}, "
+            ), 0, 12,
+        )
+        f3rect = f3txt.get_rect(topleft=(16, 708))
+        self.scr.fill([64, 64, 64], f3rect)
         self.scr.blit(f3txt, f3rect)
-        self.chunk_render_offset = (self.chunk_render_offset+targetoffset*scrollspeed) / (1+scrollspeed)
+        if self.ispanning:
+            self.chunk_render_offset = (
+                self.chunk_render_offset + targetoffset * scrollspeed
+            ) / (1 + scrollspeed)
         return self.scr
 
     def pan_event_handler(self, event: pygame.event.Event):
         direction = event.direction
+        if self.ispanning or self.justdidflags['pan']:
+            if self.pandirection == direction:
+                return
         self.pandirection = direction
         self.ispanning = True
         if direction > 0:
@@ -120,7 +145,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             self.me.chunkId += direction
         logger.debug(f"Handled pan event: direction: {event.direction!r}")
 
-    #def update_frame(self, dt: float = 1 / 60) -> None:
+    # def update_frame(self, dt: float = 1 / 60) -> None:
     #    pass
 
     def handle_keydown(self, event: pygame.event.Event) -> None:
@@ -129,6 +154,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     def cleanup(self) -> None:
         pass
 
+
 def initialiseall():
     pygame.init()       # TODO:
     pygame.font.init()  # - optimise this for what is in use
@@ -136,6 +162,7 @@ def initialiseall():
     logger.debug("Initialised pygame.font and pygame.mixer")
     eden.client.player.init()
     logger.debug("Initialised brian textures.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

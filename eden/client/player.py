@@ -4,7 +4,7 @@ import pygame
 from pygamescenes.entity import AbstractEntity
 import eden
 from eden.gfxutil import render_text, loadimg
-from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT
+from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT, CHUNK_WIDTH
 from eden.logic import LogicalPlayer
 from .data import get_texturelocation
 
@@ -29,18 +29,18 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         pressed_keys = pygame.key.get_pressed()
         self.mv.x = 0.0
         if pressed_keys[MV_LEFT]:
-            self.mv.x -= self.SPEED # pixels per second
+            self.mv.x -= self.SPEED  # pixels per second
         if pressed_keys[MV_RIGHT]:
-            self.mv.x += self.SPEED # pixels per second
+            self.mv.x += self.SPEED  # pixels per second
         if pressed_keys[MV_JUMP] and self.is_on_ground():
             self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 60):
         if self.is_on_ground():
-            self.mv.y = -(abs(self.mv.y)*self.BOUNCINESS)
+            self.mv.y = -(abs(self.mv.y) * self.BOUNCINESS)
             self.logical_pos.y = 0.0
         else:
-            self.mv.y += self.GRAVITY_ACCEL*dt
+            self.mv.y += self.GRAVITY_ACCEL * dt
         self.process_keystrokes()
         mv = self.mv * dt
         self.rect.move_ip(mv)
@@ -48,20 +48,26 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         # note that logical_pos is an awful homemade
         # Vector2 class which lacks stuff and is slow
         self.logical_pos.x = self.rect.centerx / 64
-        if self.logical_pos.x > 16:
+        if self.logical_pos.x > CHUNK_WIDTH:
+            logger.debug(f"Moving right chunkwise. x: {self.logical_pos.x}")
             #self.logical_pos.x -= 16.0
-            self.rect.centerx = self.logical_pos.x*64
+            #self.rect.centerx = self.logical_pos.x * 64
             #self.chunkId += 1
-            pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1))
-        elif self.logical_pos.x < 0:
-            self.logical_pos.x += 16.0
-            self.rect.centerx = self.logical_pos.x*64
-            #self.chunkId -= 1
-            pygame.event.post(pygame.event.Event(eden.constants.START_PAN_EVENT, direction=-1))
+            pygame.event.post(
+                pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1)
+            )
+        elif self.logical_pos.x < 0.0:
+            logger.debug(f"Moving left chunkwise. x: {self.logical_pos.x}")
+            self.logical_pos.x += CHUNK_WIDTH
+            self.rect.centerx = self.logical_pos.x * 64
+            # self.chunkId -= 1
+            pygame.event.post(
+                pygame.event.Event(eden.constants.START_PAN_EVENT, direction=-1)
+            )
 
     def tick(self) -> None:
         pass
- 
+
 
 class Brian(RenderedPlayer):
     mv: pygame.Vector2
@@ -73,9 +79,10 @@ class Brian(RenderedPlayer):
         self.surf = pygame.Surface(BRIAN_SIZE, TRANSPARENT)
         self.rect = self.surf.get_rect(center=pos)
         self.mv = pygame.Vector2(0.0, 0.0)
-    def update(self, dt: float=1/60):
+
+    def update(self, dt: float = 1 / 60):
         super().update(dt)
-        self.surf.blit(self.idleimg, (0,0))
+        self.surf.blit(self.idleimg, (0, 0))
 
     def render_nametag(self, surf: pygame.Surface):
         s = render_text(self.username.strip(" ") + " Brian")

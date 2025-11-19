@@ -21,7 +21,7 @@ class AbstractGame(abc.ABC):
     TARGET_FPS: int = 60
     _eventhandlers: dict[str, set[Callable]]
     clk: pygame.time.Clock
-    time: float # time alive
+    time: float  # time alive
 
     def __init__(
         self,

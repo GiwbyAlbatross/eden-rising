@@ -7,9 +7,15 @@ except ModuleNotFoundError:
     )
 else:
     TRANSPARENT = _locals.SRCALPHA
-    MV_LEFT  = _locals.K_z
+    MV_LEFT = _locals.K_z
     MV_RIGHT = _locals.K_c
-    MV_JUMP  = _locals.K_x
+    MV_JUMP = _locals.K_x
     START_PAN_EVENT = _pyg.event.custom_type()
+
 PORT = 7776
 TICK_RATE = 2
+CHUNK_WIDTH = 16 # was 16 before CHUNK_WIDTH refactor, is still 16 for testing pan should be 20
+
+
+# post-processing of constants, checking they are all valid together and so on, preventing weird behaviour, etc.
+CHUNK_WIDTH = float(CHUNK_WIDTH)
