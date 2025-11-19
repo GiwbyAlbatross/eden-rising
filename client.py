@@ -145,8 +145,11 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             self.me.chunkId += direction
         logger.debug(f"Handled pan event: direction: {event.direction!r}")
 
-    # def update_frame(self, dt: float = 1 / 60) -> None:
-    #    pass
+    def update_frame(self, dt: float = 1 / 60) -> None:
+        self.time += dt
+        self.me.update(dt)
+        #for entity in self.ticked:
+        #    entity.update(dt)
 
     def handle_keydown(self, event: pygame.event.Event) -> None:
         pass

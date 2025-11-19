@@ -28,14 +28,17 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
     def process_keystrokes(self):
         pressed_keys = pygame.key.get_pressed()
         self.mv.x = 0.0
+        speed = self.SPEED
+        if not self.is_on_ground(): speed *= 1.25
+        if pressed_keys[MV_JUMP]: speed *= 1.01
         if pressed_keys[MV_LEFT]:
-            self.mv.x -= self.SPEED  # pixels per second
+            self.mv.x -= speed  # pixels per second
         if pressed_keys[MV_RIGHT]:
-            self.mv.x += self.SPEED  # pixels per second
+            self.mv.x += speed  # pixels per second
         if pressed_keys[MV_JUMP] and self.is_on_ground():
             self.mv.y -= self.JUMP_HEIGHT
 
-    def update(self, dt: float = 1 / 60):
+    def update(self, dt: float = 1 / 50):
         if self.is_on_ground():
             self.mv.y = -(abs(self.mv.y) * self.BOUNCINESS)
             self.logical_pos.y = 0.0
