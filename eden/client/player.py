@@ -49,7 +49,7 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         # Vector2 class which lacks stuff and is slow
         self.logical_pos.x = self.rect.centerx / 64
         if self.logical_pos.x > CHUNK_WIDTH:
-            logger.debug(f"Moving right chunkwise. x: {self.logical_pos.x}")
+            #logger.debug(f"Moving right chunkwise. x: {self.logical_pos.x}")
             #self.logical_pos.x -= 16.0
             #self.rect.centerx = self.logical_pos.x * 64
             #self.chunkId += 1
@@ -57,7 +57,7 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
                 pygame.event.Event(eden.constants.START_PAN_EVENT, direction=1)
             )
         elif self.logical_pos.x < 0.0:
-            logger.debug(f"Moving left chunkwise. x: {self.logical_pos.x}")
+            #logger.debug(f"Moving left chunkwise. x: {self.logical_pos.x}")
             self.logical_pos.x += CHUNK_WIDTH
             self.rect.centerx = self.logical_pos.x * 64
             # self.chunkId -= 1
@@ -83,6 +83,9 @@ class Brian(RenderedPlayer):
     def update(self, dt: float = 1 / 60):
         super().update(dt)
         self.surf.blit(self.idleimg, (0, 0))
+
+    def render(self, chunkrenderoffset: int, surf: pygame.Surface) -> pygame.Rect:
+        return surf.blit(self.surf, self.rect.move(chunkrenderoffset, 0))
 
     def render_nametag(self, surf: pygame.Surface):
         s = render_text(self.username.strip(" ") + " Brian")

@@ -110,7 +110,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0)
         )
         for entity in self.rendered:
-            entity.render(self.scr)
+            entity.render(self.chunk_render_offset, self.scr)
         f3txt = eden.gfxutil.render_text(
             (
                 f"chunkId: {chunkId!r}, "

@@ -14,8 +14,4 @@ else:
 
 PORT = 7776
 TICK_RATE = 2
-CHUNK_WIDTH = 16 # was 16 before CHUNK_WIDTH refactor, is still 16 for testing pan should be 20
-
-
-# post-processing of constants, checking they are all valid together and so on, preventing weird behaviour, etc.
-CHUNK_WIDTH = float(CHUNK_WIDTH)
+CHUNK_WIDTH = 20 # was 16 before CHUNK_WIDTH refactor, is still 16 for testing pan should be 20
