@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 import logging
 import argparse
 import pygame  # ?
@@ -52,7 +53,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             entity.tick()
 
     def load_chunk(self, chunkId: int) -> list[list[int]]:
-        return [[0 for _ in range(20)] for _ in range(11)]
+        return [[random.randint(-1,5) for _ in range(20)] for _ in range(11)]
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
         blocktyperoot = 'assets/textures/block/'
@@ -60,9 +61,10 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
         # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
-        rendered.fill([255, 0, 200])  # TODO: render actual blocks in chunk
+        #rendered.fill([0, 0, 0])  # TODO: render actual blocks in chunk *DONE*
         for y, blks in enumerate(chunk):
             for x, blktype in enumerate(blks):
+                if blktype == 0: continue # air isn't loaded
                 try:
                     blktxtr = eden.gfxutil.loadimg(os.path.join(blocktyperoot, blocktypes[blktype]) + '.png')
                 except IndexError:

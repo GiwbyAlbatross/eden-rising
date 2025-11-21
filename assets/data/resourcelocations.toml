@@ -2,7 +2,7 @@
 
 [block]
 # numerical ID is index, location is 'assets/textures/block/<value>.png'
-blocks = ['dirt', 'grass', 'wood', 'bricks', 'etc'] # "that is dirt; it is for the players to build on" - Queen Flows
+blocks = ['air', 'dirt', 'grass', 'wood', 'bricks', 'etc'] # "that is dirt; it is for the players to build on" - Queen Flows
 # when the numerical ID lacks an entry in block.blocks
 notfound = 'assets/textures/block/notfound.png'
 
