@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 import argparse
@@ -54,7 +55,8 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         return [[0 for _ in range(20)] for _ in range(11)]
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
-        blocktypes = []  # paths to block textures, TODO: use eden.client.data
+        blocktyperoot = 'assets/textures/block/'
+        blocktypes = eden.client.data.get_texturelocation('block.blocks')
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
         # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
@@ -62,7 +64,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         for y, blks in enumerate(chunk):
             for x, blktype in enumerate(blks):
                 try:
-                    blktxtr = eden.gfxutil.loadimg(blocktypes[blktype])
+                    blktxtr = eden.gfxutil.loadimg(os.path.join(blocktyperoot, blocktypes[blktype]) + '.png')
                 except IndexError:
                     # logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
                     blktxtr = eden.gfxutil.create_notfound([16, 16])
