@@ -1,9 +1,10 @@
 "main logic for eden rising, if any ;D"
 
 from typing import Optional
+import math
 import logging
 from asyncio import Lock as AsyncLock
-from eden import IS_SERVER
+from eden import IS_SERVER, CHUNK_WIDTH, CHUNK_HEIGHT
 from eden.server.types import Item, EntityPos2D, EntityState
 
 logger = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ class LogicalPlayer:
     inventory: list[Item]
     lock: AsyncLock
     chunkId: int
+    chunk: list[list[int]]
     mv: "Vector2 | pygame.Vector2"
 
     def init(self, trait: str, pos: tuple[int, int], chunkId: int = 0) -> None:
@@ -40,12 +42,19 @@ class LogicalPlayer:
         self.logical_pos.y = 0 - pos[0] / 64
         self.logical_pos.x = pos[1] / 64
         self.chunkId = chunkId
+        self.chunk = [[0 for _ in range(CHUNK_WIDTH)] for _ in range(CHUNK_HEIGHT)]
         self.inventory = []
         self.lock = AsyncLock()
 
     def is_on_ground(self):
         # presently just checks if you're on the floor but it will in future do block-collision
-        return self.logical_pos.y <= 0.0
+        if (0 < self.logical_pos.y < CHUNK_WIDTH) and (0 < self.logical_pos.x < CHUNK_HEIGHT):
+            return False # if outside the chunk, don't bother
+        blkpos = Vector2(math.floor(self.logical_pos.x), math.floor(self.logical_pos.y)) # note: block position of the block that is being stood on
+        blktype = self.chunk[blkpos.y][blkpos.x]
+        #logger.debug(f"blktype: {blktype}, retval: {blktype==0}")
+        return blktype != 0
+        #return self.logical_pos.y <= 0.0
 
     #def tick(self) -> None:
     #    if not self.is_on_ground():

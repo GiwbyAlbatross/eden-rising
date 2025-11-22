@@ -1,3 +1,4 @@
+import math
 import os.path
 import logging
 import pygame
@@ -39,14 +40,17 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
             self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 50):
+        logger.info("Doing update method")
+        mv = self.mv * dt
+        self.rect.move_ip(mv)
         if self.is_on_ground():
             self.mv.y = -(abs(self.mv.y) * self.BOUNCINESS)
-            self.logical_pos.y = 0.0
+            #self.logical_pos.y = 0.0
+            #self.rect.bottom = 704
+            self.rect.bottom -= 16
         else:
             self.mv.y += self.GRAVITY_ACCEL * dt
         self.process_keystrokes()
-        mv = self.mv * dt
-        self.rect.move_ip(mv)
         self.logical_pos.y = (704 - self.rect.bottom) / 64
         # note that logical_pos is an awful homemade
         # Vector2 class which lacks stuff and is slow
@@ -68,6 +72,11 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
                 pygame.event.Event(eden.constants.START_PAN_EVENT, direction=-1)
             )
 
+    def render(self, chunkrenderoffset: int, surf: pygame.Surface) -> pygame.Rect:
+        # collision debug
+        pygame.draw.rect(surf, [25,255,2], pygame.Rect([math.floor(self.logical_pos.x)*64, 704 - math.floor(self.logical_pos.y)*64],[64,64]), 4)
+        
+        return surf.blit(self.surf, self.rect.move(chunkrenderoffset, 0))
     def tick(self) -> None:
         pass
 
@@ -86,9 +95,6 @@ class Brian(RenderedPlayer):
     def update(self, dt: float = 1 / 60):
         super().update(dt)
         self.surf.blit(self.idleimg, (0, 0))
-
-    def render(self, chunkrenderoffset: int, surf: pygame.Surface) -> pygame.Rect:
-        return surf.blit(self.surf, self.rect.move(chunkrenderoffset, 0))
 
     def render_nametag(self, surf: pygame.Surface):
         s = render_text(self.username.strip(" ") + " Brian")

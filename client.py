@@ -1,5 +1,6 @@
 import os
 import sys
+import math
 import random
 import logging
 import argparse
@@ -43,7 +44,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.justdidflags = {'pan':False}
         logger.info("Rendering world (first time).")
         self.twochunks = pygame.Surface([640, 176])
-        self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+        chunk = self.load_chunk(chunkId)
+        self.me.chunk = chunk
+        self.twochunks.blit(self.render_chunk(chunk), (0, 0))
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0))
         self.registerhandler(eden.constants.START_PAN_EVENT, self.pan_event_handler)
 
@@ -53,7 +56,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             entity.tick()
 
     def load_chunk(self, chunkId: int) -> list[list[int]]:
-        return [[random.randint(-1,5) for _ in range(20)] for _ in range(11)]
+        return [[random.randint(-1,5) for _ in range(eden.CHUNK_WIDTH)] for _ in range(eden.CHUNK_HEIGHT)]
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
         blocktyperoot = 'assets/textures/block/'
@@ -68,7 +71,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 try:
                     blktxtr = eden.gfxutil.loadimg(os.path.join(blocktyperoot, blocktypes[blktype]) + '.png')
                 except IndexError:
-                    # logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
+                    logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
                     blktxtr = eden.gfxutil.create_notfound([16, 16])
                 rendered.blit(blktxtr, (x * 16, y * 16))
         return rendered
@@ -90,7 +93,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.justdidflags['pan'] = False
         if self.lastchunkId != chunkId:
             logger.info("Rendering world (again).")
-            self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
+            chunk = self.load_chunk(chunkId)
+            self.me.chunk = chunk # used by is_on_ground
+            self.twochunks.blit(self.render_chunk(chunk), (0, 0))
             self.twochunks.blit(
                 self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
             )
@@ -122,6 +127,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 f"render_pos: {self.me.rect.center}, "
                 f"chunkrenderoffset: {self.chunk_render_offset:.3f}, "
                 f"ispanning: {self.ispanning}, pandirection: {self.pandirection}, "
+                f"blktype: {self.me.chunk[math.floor(self.me.logical_pos.y)][math.floor(self.me.logical_pos.x)]}"
             ), 0, 12,
         )
         f3rect = f3txt.get_rect(topleft=(16, 708))

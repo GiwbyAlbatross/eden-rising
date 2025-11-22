@@ -15,3 +15,4 @@ else:
 PORT = 7776
 TICK_RATE = 2
 CHUNK_WIDTH = 20 # was 16 before CHUNK_WIDTH refactor, is still 16 for testing pan should be 20
+CHUNK_HEIGHT= 11
