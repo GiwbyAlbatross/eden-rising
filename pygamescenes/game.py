@@ -153,6 +153,7 @@ class BaseGame(AbstractGame):
         self.rendered = pygame.sprite.Group()
         self.updated = pygame.sprite.Group()
         self.ticked = pygame.sprite.Group()
+        self.registerhandler(handler=self.handle_keydown)
 
     @abc.abstractmethod
     def handle_keydown(self, event: pygame.event.Event):

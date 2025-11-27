@@ -46,15 +46,18 @@ class LogicalPlayer:
         self.inventory = []
         self.lock = AsyncLock()
 
-    def is_on_ground(self):
-        # presently just checks if you're on the floor but it will in future do block-collision
-        if (0 < self.logical_pos.y < CHUNK_WIDTH) and (0 < self.logical_pos.x < CHUNK_HEIGHT):
-            return False # if outside the chunk, don't bother
-        blkpos = Vector2(math.floor(self.logical_pos.x), math.floor(self.logical_pos.y)) # note: block position of the block that is being stood on
+    def is_on_ground(self, yoffset: float=0.0, xoffset: float=0.0) -> bool:
+        y = self.logical_pos.y + yoffset
+        x = self.logical_pos.x + xoffset
+        if y < 0:
+            #logger.debug("LogicalPlayer.is_on_ground(): under floor and therefore in/on floor")
+            return True # if below the floor then you are in it and therefore on it
+        if (y < CHUNK_WIDTH) and (0 < x < CHUNK_HEIGHT):
+            return False # if outside the chunk, don't bother, you can't be on the floor
+        blkpos = Vector2(math.floor(x), math.floor(y)) # note: block position of the block that is being stood on
         blktype = self.chunk[blkpos.y][blkpos.x]
-        #logger.debug(f"blktype: {blktype}, retval: {blktype==0}")
+        #logger.debug(f"blktype: {blktype}, retval: {blktype!=0}")
         return blktype != 0
-        #return self.logical_pos.y <= 0.0
 
     #def tick(self) -> None:
     #    if not self.is_on_ground():

@@ -5,7 +5,7 @@ import pygame
 from pygamescenes.entity import AbstractEntity
 import eden
 from eden.gfxutil import render_text, loadimg
-from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT, CHUNK_WIDTH
+from eden.constants import TRANSPARENT, MV_LEFT, MV_JUMP, MV_RIGHT, CHUNK_WIDTH, CHUNK_HEIGHT
 from eden.logic import LogicalPlayer
 from .data import get_texturelocation
 
@@ -40,14 +40,21 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
             self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 50):
-        logger.info("Doing update method")
+        #logger.info("Doing update method")
         mv = self.mv * dt
         self.rect.move_ip(mv)
         if self.is_on_ground():
             self.mv.y = -(abs(self.mv.y) * self.BOUNCINESS)
             #self.logical_pos.y = 0.0
             #self.rect.bottom = 704
-            self.rect.bottom -= 16
+            #self.rect.bottom -= 16
+            if self.is_on_ground(1.0):
+                for i in range(1, CHUNK_HEIGHT):
+                    logger.debug(f"Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}, blktype: {self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]}")
+                    blktype = self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]
+                    self.rect.bottom -= 16*i
+                    if blktype == 0: break
+                    #if self.is_on_ground(i): break 
         else:
             self.mv.y += self.GRAVITY_ACCEL * dt
         self.process_keystrokes()
