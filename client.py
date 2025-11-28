@@ -7,6 +7,7 @@ import argparse
 import pygame  # ?
 import pygamescenes
 import eden
+import eden.logic
 import eden.client
 
 eden.IS_SERVER = False
@@ -56,7 +57,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             entity.tick()
 
     def load_chunk(self, chunkId: int) -> list[list[int]]:
-        return [[random.randint(-1,5) for _ in range(eden.CHUNK_WIDTH)] for _ in range(eden.CHUNK_HEIGHT)]
+        return eden.logic.generate_chunk()
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
         blocktyperoot = 'assets/textures/block/'
@@ -134,14 +135,17 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         strings.append(f"render_pos: {self.me.rect.bottomleft}")
         strings.append(f"chunkrenderoffset: {self.chunk_render_offset:.3f}")
         strings.append(f"ispanning: {self.ispanning}, pandirection: {self.pandirection}")
-        try:
-            strings.append(f"blktype: {self.me.chunk[math.floor(self.me.logical_pos.y)][math.floor(self.me.logical_pos.x)]}")
-        except IndexError:
-            strings.append(f"outOfChunk")
-        try:
-            strings.append(f"blktype+1: {self.me.chunk[math.floor(self.me.logical_pos.y+1.0)][math.floor(self.me.logical_pos.x)]}")
-        except IndexError:
-            strings.append(f"outOfChunk+1")
+        strings.append(f"blktype: {self.me.get_block_standing_on()}")
+        strings.append(f"blktype+1: {self.me.get_block_standing_in()}")
+        strings.append(f"is_on_ground: {self.me.is_on_ground()}")
+        #try:
+        #    strings.append(f"blktype: {self.me.chunk[math.floor(self.me.logical_pos.y)][math.floor(self.me.logical_pos.x)]}")
+        #except IndexError:
+        #    strings.append(f"outOfChunk")
+        #try:
+        #    strings.append(f"blktype+1: {self.me.chunk[math.floor(self.me.logical_pos.y+1.0)][math.floor(self.me.logical_pos.x)]}")
+        #except IndexError:
+        #    strings.append(f"outOfChunk+1")
         f3txt = eden.gfxutil.render_text(", ".join(strings), 0, 12)
         f3rect = f3txt.get_rect(topleft=(16, 708))
         self.scr.fill([64, 64, 64], f3rect)

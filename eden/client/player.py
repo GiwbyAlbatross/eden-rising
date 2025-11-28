@@ -43,18 +43,24 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
         #logger.info("Doing update method")
         mv = self.mv * dt
         self.rect.move_ip(mv)
-        if self.is_on_ground():
+        if (self.get_block_standing_on() != 0) and (self.logical_pos.x > 0) and (self.logical_pos.x < CHUNK_WIDTH):
+            # no gravity outside the chunk
             self.mv.y = -(abs(self.mv.y) * self.BOUNCINESS)
             #self.logical_pos.y = 0.0
             #self.rect.bottom = 704
             #self.rect.bottom -= 16
+            self.logical_pos.y = (704 - self.rect.bottom) / 64
+            self.rect.bottom = 704 - (math.floor(self.logical_pos.y)*64)
             if self.is_on_ground(1.0):
                 for i in range(1, CHUNK_HEIGHT):
-                    logger.debug(f"Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}, blktype: {self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]}")
-                    blktype = self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]
-                    self.rect.bottom -= 16*i
-                    if blktype == 0: break
-                    #if self.is_on_ground(i): break 
+                    try:
+                        #logger.debug(f"Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}, blktype: {self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]}")
+                        blktype = self.chunk[math.floor(self.logical_pos.y+i)][math.floor(self.logical_pos.x)]
+                        self.rect.bottom -= 16*i
+                        if blktype == 0: break
+                        #if self.is_on_ground(i): break
+                    except IndexError:
+                        logger.warning(f"Under floor logic triggered IndexError")
         else:
             self.mv.y += self.GRAVITY_ACCEL * dt
         self.process_keystrokes()

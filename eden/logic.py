@@ -2,6 +2,7 @@
 
 from typing import Optional
 import math
+import random
 import logging
 from asyncio import Lock as AsyncLock
 from eden import IS_SERVER, CHUNK_WIDTH, CHUNK_HEIGHT
@@ -46,6 +47,23 @@ class LogicalPlayer:
         self.inventory = []
         self.lock = AsyncLock()
 
+    def get_block_standing_on(self) -> int:
+        x = math.floor(self.logical_pos.x)
+        y = math.floor(self.logical_pos.y + 1)
+        if y < 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        try:
+            return self.chunk[y][x]
+        except IndexError:
+            return 0 # outside the world is air
+    def get_block_standing_in(self) -> int:
+        x = math.floor(self.logical_pos.x)
+        y = math.floor(self.logical_pos.y + 2)
+        if y < 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        try:
+            return self.chunk[y][x]
+        except IndexError:
+            return 0 # outside the world is air
+
     def is_on_ground(self, yoffset: float=0.0, xoffset: float=0.0) -> bool:
         y = self.logical_pos.y + yoffset
         x = self.logical_pos.x + xoffset
@@ -55,7 +73,10 @@ class LogicalPlayer:
         if (y < CHUNK_WIDTH) and (0 < x < CHUNK_HEIGHT):
             return False # if outside the chunk, don't bother, you can't be on the floor
         blkpos = Vector2(math.floor(x), math.floor(y)) # note: block position of the block that is being stood on
-        blktype = self.chunk[blkpos.y][blkpos.x]
+        try:
+            blktype = self.chunk[blkpos.y][blkpos.x]
+        except IndexError:
+            return False # outside world is falling so not on floor but outside world is 0g
         #logger.debug(f"blktype: {blktype}, retval: {blktype!=0}")
         return blktype != 0
 
@@ -114,3 +135,6 @@ class LogicalPlayer:
                 )
         self.chunkId = pos.chunkId
         self.logical_pos.x, self.logical_pos.y = pos.x, pos.y
+
+def generate_chunk() -> list[list[int]]:
+    return [[max(0, random.randint(-3,4)) for _ in range(CHUNK_WIDTH)] for _ in range(CHUNK_HEIGHT)]
