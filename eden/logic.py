@@ -49,16 +49,16 @@ class LogicalPlayer:
 
     def get_block_standing_on(self) -> int:
         x = math.floor(self.logical_pos.x)
-        y = math.floor(self.logical_pos.y + 1)
-        if y < 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        y = math.floor(self.logical_pos.y)
+        if y <= 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
         try:
             return self.chunk[y][x]
         except IndexError:
             return 0 # outside the world is air
     def get_block_standing_in(self) -> int:
         x = math.floor(self.logical_pos.x)
-        y = math.floor(self.logical_pos.y + 2)
-        if y < 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        y = math.floor(self.logical_pos.y + 1)
+        if y <= 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
         try:
             return self.chunk[y][x]
         except IndexError:
@@ -67,17 +67,7 @@ class LogicalPlayer:
     def is_on_ground(self, yoffset: float=0.0, xoffset: float=0.0) -> bool:
         y = self.logical_pos.y + yoffset
         x = self.logical_pos.x + xoffset
-        if y < 0:
-            #logger.debug("LogicalPlayer.is_on_ground(): under floor and therefore in/on floor")
-            return True # if below the floor then you are in it and therefore on it
-        if (y < CHUNK_WIDTH) and (0 < x < CHUNK_HEIGHT):
-            return False # if outside the chunk, don't bother, you can't be on the floor
-        blkpos = Vector2(math.floor(x), math.floor(y)) # note: block position of the block that is being stood on
-        try:
-            blktype = self.chunk[blkpos.y][blkpos.x]
-        except IndexError:
-            return False # outside world is falling so not on floor but outside world is 0g
-        #logger.debug(f"blktype: {blktype}, retval: {blktype!=0}")
+        blktype = self.get_block_standing_on()
         return blktype != 0
 
     #def tick(self) -> None:

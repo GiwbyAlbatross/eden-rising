@@ -10,6 +10,7 @@ else:
     MV_LEFT = _locals.K_z
     MV_RIGHT = _locals.K_c
     MV_JUMP = _locals.K_x
+    FALL_THROUGH = _locals.KMOD_SHIFT
     START_PAN_EVENT = _pyg.event.custom_type()
 
 PORT = 7776
