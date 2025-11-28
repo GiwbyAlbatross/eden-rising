@@ -42,7 +42,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.ispanning = False
         self.pandirection = 0
         self.chunk_render_offset = 0
-        self.justdidflags = {'pan':False}
+        self.justdidflags = {"pan": False}
         logger.info("Rendering world (first time).")
         self.twochunks = pygame.Surface([640, 176])
         chunk = self.load_chunk(chunkId)
@@ -60,19 +60,24 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         return eden.logic.generate_chunk()
 
     def render_chunk(self, chunk: list[list[int]]) -> pygame.Surface:
-        blocktyperoot = 'assets/textures/block/'
-        blocktypes = eden.client.data.get_texturelocation('block.blocks')
+        blocktyperoot = "assets/textures/block/"
+        blocktypes = eden.client.data.get_texturelocation("block.blocks")
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
         # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
-        #rendered.fill([0, 0, 0])  # TODO: render actual blocks in chunk *DONE*
+        # rendered.fill([0, 0, 0])  # TODO: render actual blocks in chunk *DONE*
         for y, blks in enumerate(chunk):
             for x, blktype in enumerate(blks):
-                if blktype == 0: continue # air isn't loaded
+                if blktype == 0:
+                    continue  # air isn't loaded
                 try:
-                    blktxtr = eden.gfxutil.loadimg(os.path.join(blocktyperoot, blocktypes[blktype]) + '.png')
+                    blktxtr = eden.gfxutil.loadimg(
+                        os.path.join(blocktyperoot, blocktypes[blktype]) + ".png"
+                    )
                 except IndexError:
-                    logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
+                    logger.warning(
+                        f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded."
+                    )  # when individual block rendering doesn't exist, just clogs the terminal
                     blktxtr = eden.gfxutil.create_notfound([16, 16])
                 rendered.blit(blktxtr, (x * 16, 176 - y * 16))
         return rendered
@@ -91,30 +96,34 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         #    )
         #    self.lastchunkId = chunkId
         #    self.chunk_render_offset = 0
-        self.justdidflags['pan'] = False
+        self.justdidflags["pan"] = False
         if self.lastchunkId != chunkId:
             logger.info("Rendering world (again).")
             chunk = self.load_chunk(chunkId)
-            self.me.chunk = chunk # used by is_on_ground
+            self.me.chunk = chunk  # used by is_on_ground
             self.twochunks.blit(self.render_chunk(chunk), (0, 0))
             self.twochunks.blit(
                 self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
             )
             self.lastchunkId = chunkId
-        if self.pandirection > 0 and self.chunk_render_offset < -1279 and self.ispanning:
+        if (
+            self.pandirection > 0
+            and self.chunk_render_offset < -1279
+            and self.ispanning
+        ):
             logger.debug(f"render_frame pandirection>0 handler triggered")
             self.me.chunkId += 1
             self.me.logical_pos.x -= eden.constants.CHUNK_WIDTH
             self.me.rect.centerx = self.me.logical_pos.x * 64
             self.chunk_render_offset = 0.0
             self.ispanning = False
-            self.justdidflags['pan'] = True
+            self.justdidflags["pan"] = True
             logger.debug(f"x: {self.me.logical_pos.x}")
         elif self.pandirection < 0 and self.chunk_render_offset > -1 and self.ispanning:
             logger.debug(f"render_frame pandirection<0 handler triggered")
             self.ispanning = False
             self.chunk_render_offset = 0.0
-            self.justdidflags['pan'] = True
+            self.justdidflags["pan"] = True
         self.scr.fill([0, 0, 0])
         self.scr.blit(
             pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0)
@@ -127,7 +136,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             ) / (1 + scrollspeed)
         self.render_debug_text()
         return self.scr
-    
+
     def render_debug_text(self):
         strings = []
         strings.append(f"chunkId: {self.me.chunkId!r}")
@@ -135,26 +144,28 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         strings.append(f"mv: {self.me.mv}")
         strings.append(f"render_pos: {self.me.rect.bottomleft}")
         strings.append(f"chunkrenderoffset: {self.chunk_render_offset:.3f}")
-        strings.append(f"ispanning: {self.ispanning}, pandirection: {self.pandirection}")
+        strings.append(
+            f"ispanning: {self.ispanning}, pandirection: {self.pandirection}"
+        )
         strings.append(f"blktype: {self.me.get_block_standing_on()}")
         strings.append(f"blktype+1: {self.me.get_block_standing_in()}")
         strings.append(f"is_on_ground: {self.me.is_on_ground()}")
-        #try:
+        # try:
         #    strings.append(f"blktype: {self.me.chunk[math.floor(self.me.logical_pos.y)][math.floor(self.me.logical_pos.x)]}")
-        #except IndexError:
+        # except IndexError:
         #    strings.append(f"outOfChunk")
-        #try:
+        # try:
         #    strings.append(f"blktype+1: {self.me.chunk[math.floor(self.me.logical_pos.y+1.0)][math.floor(self.me.logical_pos.x)]}")
-        #except IndexError:
+        # except IndexError:
         #    strings.append(f"outOfChunk+1")
         f3txt = eden.gfxutil.render_text(", ".join(strings), 0, 12)
         f3rect = f3txt.get_rect(topleft=(16, 708))
         self.scr.fill([64, 64, 64], f3rect)
         self.scr.blit(f3txt, f3rect)
-    
+
     def pan_event_handler(self, event: pygame.event.Event):
         direction = event.direction
-        if self.ispanning or self.justdidflags['pan']:
+        if self.ispanning or self.justdidflags["pan"]:
             if self.pandirection == direction:
                 return
         self.pandirection = direction
@@ -171,7 +182,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     def update_frame(self, dt: float = 1 / 60) -> None:
         self.time += dt
         self.me.update(dt)
-        #for entity in self.ticked:
+        # for entity in self.ticked:
         #    entity.update(dt)
 
     def handle_keydown(self, event: pygame.event.Event) -> None:
@@ -182,9 +193,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
 
 
 def initialiseall():
-    pygame.init()       # TODO:
+    pygame.init()  # TODO:
     pygame.font.init()  # - optimise this for what is in use
-    pygame.mixer.init() # - ...
+    pygame.mixer.init()  # - ...
     logger.debug("Initialised pygame.font and pygame.mixer")
     eden.client.player.init()
     logger.debug("Initialised brian textures.")

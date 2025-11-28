@@ -50,27 +50,31 @@ class LogicalPlayer:
     def get_block_standing_on(self) -> int:
         x = math.floor(self.logical_pos.x)
         y = math.floor(self.logical_pos.y)
-        if y <= 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        if y <= 0:
+            return -1  # -1 is a solid block that shouldn't be rendered or whatever
         try:
             return self.chunk[y][x]
         except IndexError:
-            return 0 # outside the world is air
+            return 0  # outside the world is air
+
     def get_block_standing_in(self) -> int:
         x = math.floor(self.logical_pos.x)
         y = math.floor(self.logical_pos.y + 1)
-        if y <= 0: return -1 # -1 is a solid block that shouldn't be rendered or whatever
+        if y <= 0:
+            return -1  # -1 is a solid block that shouldn't be rendered or whatever
         try:
             return self.chunk[y][x]
         except IndexError:
-            return 0 # outside the world is air
+            return 0  # outside the world is air
 
-    def is_on_ground(self, yoffset: float=0.0, xoffset: float=0.0) -> bool:
+    def is_on_ground(self, yoffset: float = 0.0, xoffset: float = 0.0) -> bool:
+        ### unused function? ###
         y = self.logical_pos.y + yoffset
         x = self.logical_pos.x + xoffset
         blktype = self.get_block_standing_on()
         return blktype != 0
 
-    #def tick(self) -> None:
+    # def tick(self) -> None:
     #    if not self.is_on_ground():
     #        self.mv.y += (
     #            self.GRAVITY_ACCEL / 20
@@ -126,5 +130,9 @@ class LogicalPlayer:
         self.chunkId = pos.chunkId
         self.logical_pos.x, self.logical_pos.y = pos.x, pos.y
 
+
 def generate_chunk() -> list[list[int]]:
-    return [[max(0, random.randint(-3,4)) for _ in range(CHUNK_WIDTH)] for _ in range(CHUNK_HEIGHT)]
+    return [
+        [max(0, random.randint(-3, 4)) for _ in range(CHUNK_WIDTH)]
+        for _ in range(CHUNK_HEIGHT)
+    ]
