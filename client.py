@@ -66,7 +66,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         # 1280,704 is size of chunk on screen, up to two chunks are loaded at once
         # chunks are 20x11 blocks, each block having a 16x16 texture, scaled up 4x later
         rendered = pygame.Surface([320, 176])
-        # rendered.fill([0, 0, 0])  # TODO: render actual blocks in chunk *DONE*
+        rendered.fill([16,16,16])
         for y, blks in enumerate(chunk):
             for x, blktype in enumerate(blks):
                 if blktype == 0:
@@ -200,12 +200,11 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         blkpos = self.get_hovered_block_pos(event.pos)
         if (pygame.Vector2(blkpos) - pygame.Vector2(self.me.logical_pos.x, self.me.logical_pos.y)).length() > 4:
             return
-        if self.me.heldblock == 0:
-            self.me.heldblock = self.me.chunk[blkpos[1]][blkpos[0]]
-            self.me.chunk[blkpos[1]][blkpos[0]] = 0
-        else:
+        try:
+            blktype = self.me.chunk[blkpos[1]][blkpos[0]]
             self.me.chunk[blkpos[1]][blkpos[0]] = self.me.heldblock
-            self.me.heldblock = 0
+            self.me.heldblock = blktype
+        except IndexError: return
         self.twochunks.blit(self.render_chunk(self.me.chunk), (0, 0))
 
     def update_frame(self, dt: float = 1 / 60) -> None:
