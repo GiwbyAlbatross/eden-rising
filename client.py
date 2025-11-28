@@ -74,7 +74,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 except IndexError:
                     logger.warning(f"Unrecognised blocktype: {blktype!r}. Continuing, assuming server is modded.") # when individual block rendering doesn't exist, just clogs the terminal
                     blktxtr = eden.gfxutil.create_notfound([16, 16])
-                rendered.blit(blktxtr, (x * 16, y * 16))
+                rendered.blit(blktxtr, (x * 16, 176 - y * 16))
         return rendered
 
     def render_frame(self) -> pygame.surface.Surface:
@@ -132,6 +132,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         strings = []
         strings.append(f"chunkId: {self.me.chunkId!r}")
         strings.append(f"logical_pos: {self.me.logical_pos!r}")
+        strings.append(f"mv: {self.me.mv}")
         strings.append(f"render_pos: {self.me.rect.bottomleft}")
         strings.append(f"chunkrenderoffset: {self.chunk_render_offset:.3f}")
         strings.append(f"ispanning: {self.ispanning}, pandirection: {self.pandirection}")
