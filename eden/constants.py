@@ -13,8 +13,9 @@ else:
     MV_JUMP = _locals.K_x
     FALL_THROUGH = _locals.KMOD_SHIFT
     START_PAN_EVENT = _pyg.event.custom_type()
+    CLICK = _locals.MOUSEBUTTONDOWN
 
 PORT = 7776
 TICK_RATE = 2
-CHUNK_WIDTH = 20 # was 16 before CHUNK_WIDTH refactor, is still 16 for testing pan should be 20
+CHUNK_WIDTH = 20 # was 16 before CHUNK_WIDTH refactor, should be 20
 CHUNK_HEIGHT = 11

@@ -29,6 +29,7 @@ class LogicalPlayer:
     GRAVITY_ACCEL = 98.0
     logical_pos: Vector2
     username: str
+    heldblock: int = 0
     helditem: Optional[Item] = None
     inventory: list[Item]
     lock: AsyncLock

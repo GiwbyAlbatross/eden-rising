@@ -50,6 +50,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.twochunks.blit(self.render_chunk(chunk), (0, 0))
         self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0))
         self.registerhandler(eden.constants.START_PAN_EVENT, self.pan_event_handler)
+        self.registerhandler(eden.constants.CLICK, self.mousedown_event_handler)
 
     def update_tick(self) -> None:
         "tick entities and do network sync multiplayer stuff"
@@ -88,15 +89,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         targetoffset = 0 if self.pandirection < 0 else -1280
         # targetoffset = 0
         chunkId = self.me.chunkId
-        # if self.lastchunkId != chunkId and self.chunk_render_offset == round(targetoffset):
-        #    logger.info("Rendering world (again).")
-        #    self.twochunks.blit(self.render_chunk(self.load_chunk(chunkId)), (0, 0))
-        #    self.twochunks.blit(
-        #        self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
-        #    )
-        #    self.lastchunkId = chunkId
-        #    self.chunk_render_offset = 0
         self.justdidflags["pan"] = False
+        
+        # render new chunks if chunkId changes
         if self.lastchunkId != chunkId:
             logger.info("Rendering world (again).")
             chunk = self.load_chunk(chunkId)
@@ -106,6 +101,8 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
                 self.render_chunk(self.load_chunk(chunkId + 1)), (320, 0)
             )
             self.lastchunkId = chunkId
+        
+        # panning handlers
         if (
             self.pandirection > 0
             and self.chunk_render_offset < -1279
@@ -124,32 +121,51 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             self.ispanning = False
             self.chunk_render_offset = 0.0
             self.justdidflags["pan"] = True
-        self.scr.fill([0, 0, 0])
+        
+        
+        #self.scr.fill([0, 0, 0])
         self.scr.blit(
             pygame.transform.scale_by(self.twochunks, 4), (self.chunk_render_offset, 0)
-        )
+        )  # render world
+        
+        # render entities
         for entity in self.rendered:
             entity.render(self.chunk_render_offset, self.scr)
+            entity.render_nametag(self.scr)
+        
+        # handle panning
         if self.ispanning:
             self.chunk_render_offset = (
                 self.chunk_render_offset + targetoffset * scrollspeed
             ) / (1 + scrollspeed)
+        else: # render block placing overlay (dev)
+            mousepos = pygame.mouse.get_pos()
+            blkpos = self.get_hovered_block_pos(mousepos)
+            if (pygame.Vector2(blkpos) - pygame.Vector2(self.me.logical_pos.x, self.me.logical_pos.y)).length() < 4:
+                pygame.draw.rect(self.scr, (255,255,255), pygame.Rect(blkpos[0]*64, 704 - blkpos[1]*64, 64, 64), 5)
         self.render_debug_text()
         return self.scr
+
+    def get_hovered_block_pos(self, mousepos: tuple[int, int]) -> tuple[int, int]:
+        x = mousepos[0] / 64
+        y = (704 - mousepos[1]) / 64
+        return (math.floor(x), math.floor(y) + 1)
+    def get_hovered_block_type(self, mousepos: tuple[int, int]) -> int:
+        x, y = self.get_hovered_block_pos(mouspos)
+        return self.me.chunk[y][x]
 
     def render_debug_text(self):
         strings = []
         strings.append(f"chunkId: {self.me.chunkId!r}")
-        strings.append(f"logical_pos: {self.me.logical_pos!r}")
-        strings.append(f"mv: {self.me.mv}")
+        strings.append(f"logical_pos: {vec2repr(self.me.logical_pos)}")
+        strings.append(f"mv: {vec2repr(self.me.mv)}")
         strings.append(f"render_pos: {self.me.rect.bottomleft}")
         strings.append(f"chunkrenderoffset: {self.chunk_render_offset:.3f}")
-        strings.append(
-            f"ispanning: {self.ispanning}, pandirection: {self.pandirection}"
-        )
+        strings.append(f"ispanning: {self.ispanning}")
         strings.append(f"blktype: {self.me.get_block_standing_on()}")
         strings.append(f"blktype+1: {self.me.get_block_standing_in()}")
         strings.append(f"is_on_ground: {self.me.is_on_ground()}")
+        strings.append(f"heldblock: {self.me.heldblock}")
         # try:
         #    strings.append(f"blktype: {self.me.chunk[math.floor(self.me.logical_pos.y)][math.floor(self.me.logical_pos.x)]}")
         # except IndexError:
@@ -178,6 +194,19 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             self.chunk_render_offset = -1280
             self.me.chunkId += direction
         logger.debug(f"Handled pan event: direction: {event.direction!r}")
+    
+    def mousedown_event_handler(self, event: pygame.event.Event):
+        #logger.info(f"MOUSEDOWN: {event.__dict__}")
+        blkpos = self.get_hovered_block_pos(event.pos)
+        if (pygame.Vector2(blkpos) - pygame.Vector2(self.me.logical_pos.x, self.me.logical_pos.y)).length() > 4:
+            return
+        if self.me.heldblock == 0:
+            self.me.heldblock = self.me.chunk[blkpos[1]][blkpos[0]]
+            self.me.chunk[blkpos[1]][blkpos[0]] = 0
+        else:
+            self.me.chunk[blkpos[1]][blkpos[0]] = self.me.heldblock
+            self.me.heldblock = 0
+        self.twochunks.blit(self.render_chunk(self.me.chunk), (0, 0))
 
     def update_frame(self, dt: float = 1 / 60) -> None:
         self.time += dt
@@ -200,6 +229,9 @@ def initialiseall():
     eden.client.player.init()
     logger.debug("Initialised brian textures.")
 
+def vec2repr(vector) -> str:
+    " universal vector repr function "
+    return f"vec2({vector.x:.3f}, {vector.y:.3f})"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -27,31 +27,35 @@ brianlogger = logging.getLogger(__name__ + ".Brian")
 
 class RenderedPlayer(AbstractEntity, LogicalPlayer):
     GRAVITY_ACCEL: float = 980.0
-    JUMP_HEIGHT: float = 512.0
+    JUMP_HEIGHT: float = 444.4
     BOUNCINESS: float = 0.45
     SPEED: float = 128.0
+
+    facing: bool = False # False is right, True is left
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def process_keystrokes(self, pressed_keys):
         # pressed_keys = pygame.key.get_pressed()
-        self.mv.x *= 0.003
+        self.mv.x *= 0.05
         speed = self.SPEED
         if not self.is_on_ground():
             speed *= 1.25
         if pressed_keys[MV_JUMP]:
             speed *= 1.01
         if pressed_keys[MV_LEFT]:
+            self.facing = True
             self.mv.x -= speed  # pixels per second
         if pressed_keys[MV_RIGHT]:
+            self.facing = False
             self.mv.x += speed  # pixels per second
         if (
             pressed_keys[MV_JUMP]
             and self.get_block_standing_on() != 0
             and (self.logical_pos.y % 1) < 0.1
         ):
-            logger.debug(f"[JUMPING]: height above block {(self.logical_pos.y % 1)}")
+            #logger.debug(f"[JUMPING]: height above block {(self.logical_pos.y % 1)}")
             self.mv.y -= self.JUMP_HEIGHT
 
     def update(self, dt: float = 1 / 50):
@@ -94,18 +98,18 @@ class RenderedPlayer(AbstractEntity, LogicalPlayer):
 
     def render(self, chunkrenderoffset: int, surf: pygame.Surface) -> pygame.Rect:
         # collision debug
-        pygame.draw.rect(
-            surf,
-            [25, 255, 2],
-            pygame.Rect(
-                [
-                    math.floor(self.logical_pos.x) * 64,
-                    704 - math.floor(self.logical_pos.y) * 64,
-                ],
-                [64, 64],
-            ),
-            4,
-        )
+        #pygame.draw.rect(
+        #    surf,
+        #    [25, 255, 2],
+        #    pygame.Rect(
+        #        [
+        #            math.floor(self.logical_pos.x) * 64,
+        #            704 - math.floor(self.logical_pos.y) * 64,
+        #        ],
+        #        [64, 64],
+        #    ),
+        #    4,
+        #)
 
         return surf.blit(self.surf, self.rect.move(chunkrenderoffset, 0))
 
@@ -117,7 +121,7 @@ class Brian(RenderedPlayer):
     mv: pygame.Vector2
     idleimg: pygame.Surface
 
-    def __init__(self, trait: str = "Boring", pos: tuple[int, int] = (0, scr_h - 200)):
+    def __init__(self, trait: str = "Boring Brian", pos: tuple[int, int] = (0, scr_h - 200)):
         super().__init__()
         self.init(trait, pos)
         self.surf = pygame.Surface(BRIAN_SIZE, TRANSPARENT)
@@ -126,10 +130,12 @@ class Brian(RenderedPlayer):
 
     def update(self, dt: float = 1 / 60):
         super().update(dt)
-        self.surf.blit(self.idleimg, (0, 0))
+        # TODO: optimise this gfx stuff
+        self.surf.fill([0,0,0,0])
+        self.surf.blit(pygame.transform.flip(self.idleimg, self.facing, False), (0, 0))
 
     def render_nametag(self, surf: pygame.Surface):
-        s = render_text(self.username.strip(" ") + " Brian")
+        s = render_text(self.username.strip(" "))
         r = s.get_rect(bottom=self.rect.top, centerx=self.rect.centerx)
         surf.blit(s, r)
 
