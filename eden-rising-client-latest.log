@@ -1,0 +1,120 @@
+[17:15:56] [client(__main__)/DEBUG]: Initialised pygame.font and pygame.mixer
+[17:15:56] [eden.client.data/INFO]: ResourceLocations file previously not loaded. Loading 'assets/data/resourcelocations.toml'
+[17:15:56] [client(__main__)/DEBUG]: Initialised brian textures.
+[17:15:56] [client(__main__)/INFO]: Rendering world (first time).
+[17:15:56] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:56] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:56] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:56] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.client.player/DEBUG]: Under floor logic: x: {self.logical_pos.x}, y: {self.logical_pos.y}, yoffset: {i}, ~y: {self.logical_pos.y+i}
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:15:57] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:18] [client(__main__)/DEBUG]: Initialised pygame.font and pygame.mixer
+[17:17:18] [eden.client.data/INFO]: ResourceLocations file previously not loaded. Loading 'assets/data/resourcelocations.toml'
+[17:17:18] [client(__main__)/DEBUG]: Initialised brian textures.
+[17:17:18] [client(__main__)/INFO]: Rendering world (first time).
+[17:17:18] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:18] [eden.client.player/DEBUG]: Under floor logic: x: 8.125, y: -3.125, yoffset: -4, ~y: -7.125
+[17:17:18] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:18] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -0.09375, yoffset: -1, ~y: -1.09375
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -0.546875, yoffset: -1, ~y: -1.546875
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -0.703125, yoffset: -1, ~y: -1.703125
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -0.921875, yoffset: -1, ~y: -1.921875
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -1.15625, yoffset: -2, ~y: -3.15625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -1.65625, yoffset: -2, ~y: -3.65625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -2.15625, yoffset: -3, ~y: -5.15625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -2.90625, yoffset: -3, ~y: -5.90625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -3.65625, yoffset: -4, ~y: -7.65625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -4.65625, yoffset: -5, ~y: -9.65625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -5.90625, yoffset: -6, ~y: -11.90625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -7.40625, yoffset: -8, ~y: -15.40625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.client.player/DEBUG]: Under floor logic: x: 3.125, y: -9.40625, yoffset: -10, ~y: -19.40625
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
+[17:17:19] [eden.logic/DEBUG]: LogicalPlayer.is_on_ground(): under floor and therefore in/on floor
