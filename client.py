@@ -12,6 +12,7 @@ import eden.client
 
 eden.IS_SERVER = False
 LOG_LOCATION = "eden-rising-client-latest.log"
+VERSION = "v0.0.3-alpha/incomplete"
 
 logging.basicConfig(
     format="[%(asctime)s] [%(name)s/%(levelname)s]: %(message)s",
@@ -20,7 +21,7 @@ logging.basicConfig(
     level=(logging.DEBUG if __debug__ else logging.INFO),
 )
 logger = logging.getLogger(f"client({__name__})")
-
+logger.info(f"Welcome to Eden Rising (version: {VERSION}).")
 
 class EdenRisingClient(pygamescenes.game.BaseGame):
     TARGET_FPS: int = 50
@@ -235,6 +236,7 @@ def vec2repr(vector) -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # add arguments, etc
+    #parser.add_argument("--credentials-file"
     initialiseall()
     args = parser.parse_args()
     game = EdenRisingClient(

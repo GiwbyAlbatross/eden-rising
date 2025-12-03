@@ -83,7 +83,7 @@ class LogicalPlayer:
     #        #  # networking happens at other times, in threads
 
     def get_state(self) -> EntityState:
-        # more state attributes will be added later but for now forget it
+        # more state attributes may be added later but for now forget it
         es = EntityState(
             entityId=self.username, helditem=self.helditem, chunkId=self.chunkId
         )
@@ -134,6 +134,6 @@ class LogicalPlayer:
 
 def generate_chunk() -> list[list[int]]:
     return [
-        [max(0, random.randint(-3, 4)) for _ in range(CHUNK_WIDTH)]
+        [max(0, random.randint(-4, 4)) for _ in range(CHUNK_WIDTH)]
         for _ in range(CHUNK_HEIGHT)
     ]
