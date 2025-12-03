@@ -53,3 +53,26 @@ Code is formatted using the `black` formatting style. I use `ruff` however, for 
 python3 -m pip install -r devrequirements.txt
 ruff format
 ```
+
+## Mechanics
+
+### Character Rank
+
+Players can be leved up by Queen Flows (sort of leader in the game, wheather or not they are a real player on the other end is debated in the play until the end where it is clear) or administrators (username: `Avesta` *you will probably never get it unless you saw the play.*)
+
+#### Ranks
+```
+0. Brian # can interact with the world, each other and the market, etc
+1. Mark or Val # reference to the original play, can do all the brian things, plus 'secret market' access and private missions
+2. Playable Character with custom name # same as Mark/Val, but the admins/Flows trusts that they won't make a stupid entity name
+3. King # can start wars and govern a faction, has the ability to provide kits of basic items to players in your faction, can't interact with world
+```
+
+### Controls
+
+```
+Z: move left on screen
+X: jump
+C: move right on screen
+shift: go under the block you are standing on
+```
