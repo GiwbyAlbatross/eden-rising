@@ -4,7 +4,8 @@ import math
 import random
 import logging
 import argparse
-import pygame  # ?
+import pygame
+import pygame_gui
 import pygamescenes
 import eden
 import eden.logic
@@ -33,6 +34,9 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
     ispanning: bool
     pandirection: int
     justdidflags: dict
+    menuopen: bool = False
+    uimanager: pygame_gui.UIManager
+    pauseui: eden.client.ui.EdenRisingPauseUI
 
     def init(self, **kwargs):
         self.me = eden.client.player.Brian(pos=(200, self.scr_h - 200))
@@ -45,6 +49,8 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         self.chunk_render_offset = 0
         self.justdidflags = {"pan": False}
         logger.info("Rendering world (first time).")
+        self.uimanager = pygame_gui.UIManager(self.scr_size, "assets/data/uitheme.json")
+        self.pauseui = eden.client.ui.EdenRisingPauseUI(self)
         self.twochunks = pygame.Surface([640, 176])
         chunk = self.load_chunk(chunkId)
         self.me.chunk = chunk
@@ -144,6 +150,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
             blkpos = self.get_hovered_block_pos(mousepos)
             if (pygame.Vector2(blkpos) - pygame.Vector2(self.me.logical_pos.x, self.me.logical_pos.y)).length() < 4:
                 pygame.draw.rect(self.scr, (255,255,255), pygame.Rect(blkpos[0]*64, 704 - blkpos[1]*64, 64, 64), 5)
+        if self.menuopen: self.uimanager.draw_ui(self.scr)
         self.render_debug_text()
         return self.scr
 
@@ -156,7 +163,7 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         return self.me.chunk[y][x]
 
     def render_debug_text(self):
-        strings = []
+        strings = [f"{self.clk.get_fps():.1f} fps,"]
         strings.append(f"chunkId: {self.me.chunkId!r}")
         strings.append(f"logical_pos: {vec2repr(self.me.logical_pos)}")
         strings.append(f"mv: {vec2repr(self.me.mv)}")
@@ -208,14 +215,25 @@ class EdenRisingClient(pygamescenes.game.BaseGame):
         except IndexError: return
         self.twochunks.blit(self.render_chunk(self.me.chunk), (0, 0))
 
+    def handle_keydown(self, event: pygame.event.Event) -> None:
+        key  = event.key
+        #mods = event.mods
+        if key == pygame.K_ESCAPE:
+            self.menuopen = not self.menuopen
+
+    def process_event(self, event: pygame.event.Event) -> None:
+        super().process_event(event)
+        self.uimanager.process_events(event)
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            self.pauseui.buttonpressed(event)
+
     def update_frame(self, dt: float = 1 / 60) -> None:
         self.time += dt
         self.me.update(dt)
+        self.uimanager.update(dt)
         # for entity in self.ticked:
         #    entity.update(dt)
 
-    def handle_keydown(self, event: pygame.event.Event) -> None:
-        pass
 
     def cleanup(self) -> None:
         pass

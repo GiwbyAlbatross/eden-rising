@@ -1,6 +1,8 @@
 pygame-ce>=2.5.0
 tomli >= 1.1.0 ; python_version < "3.11"
+pydantic
 requests
+pygame_gui >= 0.5
 mypy
 pylint
 ruff
